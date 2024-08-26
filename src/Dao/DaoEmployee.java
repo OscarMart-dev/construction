@@ -18,7 +18,7 @@ public class DaoEmployee {
     ResultSet rs;
 
     public DaoEmployee() {
-        this.cn = new connection();
+        this.cn = new connection() ;
     }
     
     public List Listar(){
