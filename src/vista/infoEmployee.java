@@ -16,7 +16,7 @@ public class infoEmployee extends javax.swing.JFrame {
     /**
      * Creates new form infoEmployee
      */
-     public infoEmployee() {
+    public infoEmployee() {
         // Inicialización
     }
     
@@ -24,22 +24,21 @@ public class infoEmployee extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
         DaoEmployee dao=new DaoEmployee(); /*se importa la clase users*/
-         List <employee> empleados = dao.consultar(nro_registro);
-         if (!empleados.isEmpty()) {
-        employee emp = empleados.get(0);  // Supongamos que solo esperas un empleado con el mismo código
+        employee emp = dao.consultar(nro_registro);  // Supongamos que solo esperas un empleado con el mismo código
         txtdocumento.setText(String.valueOf(emp.getId()));
         txtname.setText(emp.getName());
-        txtbirthdate.setText(emp.getBirthdate().toString());
+        System.out.println("vista.infoEmployee" + emp.getBirthdate());
+        //txtbirthdate.setText(emp.getBirthdate().toString());
         txtaddress.setText(emp.getAddress());
         txtphone.setText(String.valueOf(emp.getPhone()));
         txtyear.setText(String.valueOf(emp.getYear()));
         txtemail.setText(emp.getEmail());
-        // txtPost.setText(emp.getPost());  // Si no está en el modelo, puedes eliminarlo
-        // txtState.setText(emp.getState());  // Igualmente, si no está en el modelo, eliminarlo
-    } else {
-        JOptionPane.showMessageDialog(this, "No se encontró el empleado con el código: " + empleados);
-    }
+        cmbpost.addItem("a");
+        // select cargo
+        // llenar arrar String de datos cargo
+        // for para llenar los additems
         
+        //txtState.setText(emp.getState());  // Igualmente, si no está en el modelo, eliminarlo       
         
     }
 

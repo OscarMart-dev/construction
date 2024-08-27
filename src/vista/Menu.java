@@ -254,22 +254,21 @@ public class Menu extends javax.swing.JFrame {
           
         // TODO add your handling code here:
         //obtener la fila
-            int row = tableEmployee.getSelectedRow();
-            //obtener la columna
-            int column = tableEmployee.getSelectedColumn();
-            //si la columna es la 1era
-            if (column == 0) {
-                DefaultTableModel model = (DefaultTableModel) tableEmployee.getModel();
-                Object value = model.getValueAt(row, column);
-                String nro_registro = (value != null) ? value.toString() : null; //se convierte el valor a string
-                //JOptionPane.showMessageDialog(null, nro_registro);
-                if (nro_registro != null && !nro_registro.isEmpty()) {
-            // Crear y mostrar la ventana emergente con la información del empleado
-            infoEmployee infoEmployee = new infoEmployee();
-            infoEmployee.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "No hay información disponible para este registro.");
-        
+        int row = tableEmployee.getSelectedRow();
+        //obtener la columna
+        int column = tableEmployee.getSelectedColumn();
+        //si la columna es la 1era
+        if (column == 0) {
+            DefaultTableModel model = (DefaultTableModel) tableEmployee.getModel();
+            Object value = model.getValueAt(row, column);
+            String nro_registro = (value != null) ? value.toString() : null; //se convierte el valor a string
+            //JOptionPane.showMessageDialog(null, nro_registro);
+            if (nro_registro != null && !nro_registro.isEmpty()) {
+                // Crear y mostrar la ventana emergente con la información del empleado
+                infoEmployee infoEmployee = new infoEmployee(nro_registro);
+                infoEmployee.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay información disponible para este registro.");
             }
         }
     }//GEN-LAST:event_tableEmployeeMouseClicked
