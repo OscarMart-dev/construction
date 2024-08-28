@@ -13,11 +13,12 @@ public class employee {
     String email;
     String post;
     String state;
+    String area;
 
     public employee() {
     }
 
-    public employee(int id, String name, LocalDate birthdate, String address, int phone, int year, String email, String post, String state) {
+    public employee(int id, String name, LocalDate birthdate, String address, int phone, int year, String email, String post, String state, String area) {
         this.id = id;
         this.name = name;
         this.birthdate = birthdate;
@@ -27,6 +28,15 @@ public class employee {
         this.email = email;
         this.post = post;
         this.state = state;
+        this.area= area;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public int getId() {
@@ -101,6 +111,4 @@ public class employee {
         this.state = state;
     }
 
-  
-    
 }

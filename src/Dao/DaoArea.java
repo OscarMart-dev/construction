@@ -24,7 +24,7 @@ public class DaoArea {
     
     public List Listar(){
     List<area> list =new ArrayList<>();
-    String sql="select * from are_area";
+    String sql="select * from are_area where arec_estado ='A'";
     try{
         con=cn.conectar();
         ps=con.prepareStatement(sql);
@@ -39,5 +39,8 @@ public class DaoArea {
         JOptionPane.showConfirmDialog(null,e);
     }
     return list;
-}
+    
+       
+    }
+
 }

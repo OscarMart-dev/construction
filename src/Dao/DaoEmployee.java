@@ -1,6 +1,7 @@
 
 package Dao;
 
+import Modelo.area;
 import Modelo.employee;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,7 +45,7 @@ public class DaoEmployee {
     
     public employee consultar(String nro_registro){
         employee emp = null;
-        String sql="select empc_name,empn_id,empf_birthdate,empc_address,empn_years_experience,empc_email,empn_post,empc_state from emp_employee where empn_id ='"+nro_registro+"'";
+        String sql="select empc_name,empn_id,empf_birthdate,empc_address,empn_years_experience,empc_email,empn_post,empc_state,empn_area from emp_employee where empn_id ='"+nro_registro+"'";
         try{
             con=cn.conectar();
             ps=con.prepareStatement(sql);
@@ -59,6 +60,7 @@ public class DaoEmployee {
                 emp.setEmail(rs.getString(6));
                 emp.setPost(rs.getString(7));
                 emp.setState(rs.getString(8));
+                emp.setArea(rs.getString(9));
             }
                
         }catch(SQLException e){
@@ -67,4 +69,33 @@ public class DaoEmployee {
         return emp;
     }
     
+        public List<area> obtenerAreas() {
+        List<area> areas = new ArrayList<>();
+        String sql = "SELECT aren_id, arec_name, arec_estado FROM are_area WHERE arec_estado = 'A'";
+
+        try {
+            con = cn.conectar();  // Método para conectar a la base de datos
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int code = rs.getInt("aren_id");
+                String name = rs.getString("arec_name");
+                char state = rs.getString("arec_estado").charAt(0);
+                areas.add(new area(code, name, state));
+            }
+        } catch (Exception e) {
+            System.out.println("no encontro areas");
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                System.out.println("cierra conexion");
+            }
+        }
+        return areas;
+    }
+
 }

@@ -6,8 +6,10 @@ package vista;
 
 import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
 import Dao.DaoEmployee;
+import Modelo.area;
 import Modelo.employee;
 import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 public class infoEmployee extends javax.swing.JFrame {
 
@@ -33,12 +35,21 @@ public class infoEmployee extends javax.swing.JFrame {
         txtphone.setText(String.valueOf(emp.getPhone()));
         txtyear.setText(String.valueOf(emp.getYear()));
         txtemail.setText(emp.getEmail());
-        cmbpost.addItem("a");
-        // select cargo
-        // llenar arrar String de datos cargo
-        // for para llenar los additems
-        
-        //txtState.setText(emp.getState());  // Igualmente, si no está en el modelo, eliminarlo       
+         // Llenar el ComboBox de áreas con objetos area
+        List<area> areas = dao.obtenerAreas();
+        for (area areaObj : areas) {
+        cmbarea.addItem(areaObj.getName());
+        JComboBox<ComboItem> comboBox = new JComboBox<>();
+        comboBox.addItem(new ComboItem("A", "Activo"));
+        comboBox.addItem(new ComboItem("I", "Inactivo"));
+        ComboItem selectedItem = (ComboItem) comboBox.getSelectedItem();
+        //con esto se obtiene los datos de la lista esta quemada por el momento
+        if (selectedItem != null) {
+            String id = selectedItem.getId();
+            String state = selectedItem.getState();
+
+        }
+    }
         
     }
 
@@ -104,11 +115,9 @@ public class infoEmployee extends javax.swing.JFrame {
 
         jLabel11.setText("Estado");
 
-        cmbarea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        txtdocumento.setEnabled(false);
 
-        cmbpost.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        cmbstate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbstate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
 
         btnaceptar.setText("Aceptar");
 
