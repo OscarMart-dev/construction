@@ -5,6 +5,7 @@
 package vista;
 
 import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
+import Dao.DaoArea;
 
 /**
  *
@@ -12,12 +13,28 @@ import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
  */
 public class areaVista extends javax.swing.JFrame {
         
-    /**
-     * Creates new form area
-     */
+    DaoArea area=new DaoArea();
+    private Menu menu;
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+    
     public areaVista() {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
+        area.Listar();
+    }
+
+    areaVista(Menu menu) {
+        initComponents();
+        this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
+        area.Listar();
+        this.menu = menu;
         
     }
     
@@ -89,17 +106,19 @@ public class areaVista extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        String area= txtarea.getText();
+        DaoArea Darea = new DaoArea();
+        String inputArea= txtarea.getText();
         char state;
-            if (cmbState.getSelectedItem()=="Activo")
-                {
-                    state='A';
-                }else {
-                    state='I';
-                }
-        System.out.println(area);
-        System.out.println(state);
-        ///falta crear el insert
+        if (cmbState.getSelectedItem()=="Activo"){
+            state='A';
+        }else {
+            state='I';
+        }
+        Darea.create(inputArea, state);
+        this.getMenu().ListarArea();
+        
+        dispose();
+        
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**

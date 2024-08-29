@@ -19,54 +19,75 @@ import javax.swing.table.DefaultTableModel;
  * @author oscar
  */
 public class Menu extends javax.swing.JFrame {
-    
-   // area ar=new area();
-    DaoArea daoA=new DaoArea();
-    DefaultTableModel modeloArea=new DefaultTableModel();
-    DaoEmployee daoE=new DaoEmployee();
-    DefaultTableModel modeloEmployee=new DefaultTableModel();
 
+   // area ar=new area();
+    private DaoArea area;
+    DaoEmployee daoE=new DaoEmployee();
+    DefaultTableModel modeloArea=new DefaultTableModel();
+    DefaultTableModel modeloEmployee=new DefaultTableModel();
+    /**
+     * @return the area
+     */
+    public DaoArea getArea() {
+        return area;
+    }
+
+    /**
+     * @param area the area to set
+     */
+    public void setArea(DaoArea area) {
+        this.area = area;
+    }
+    
+    
     public Menu() {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
+        this.setArea(new DaoArea());
         
-        Listar();//inicializar la lista cada vez que retorne al menu 
-        
-        ListarEmployee();
-        
-        
+        this.ListarArea();//inicializar la lista cada vez que retorne al menu 
+        this.ListarEmployee();
     }
     
-    private void Listar(){
-    
-    List<area> list =daoA.Listar();
-    modeloArea=(DefaultTableModel) tablearea.getModel();
-    Object[] ob=new Object[2];
-    for (int i=0;i<list.size();i++){
-        ob[0]=list.get(i).getCode();
-        ob[1]=list.get(i).getName();
-        modeloArea.addRow(ob);
-    }tablearea.setModel(modeloArea);
+    public void ListarArea(){
+        List<area> list = this.getArea().Listar();
+        modeloArea = (DefaultTableModel) tablearea.getModel();
+        clearTableArea();
+        
+        Object[] ob = new Object[2];
+        
+        for (int i=0;i<list.size();i++){
+            ob[0]=list.get(i).getCode();
+            ob[1]=list.get(i).getName();
+            modeloArea.addRow(ob);
+        }
+        
+        tablearea.setModel(modeloArea);
     }
     
-   
-        
-    private void ListarEmployee(){
-    
-    List<employee> list =daoE.Listar();
-    modeloEmployee=(DefaultTableModel) tableEmployee.getModel();
-   
-    Object[] ob=new Object[3];
-    for (int i=0;i<list.size();i++){
-        ob[0]=list.get(i).getId();
-        ob[1]=list.get(i).getName();
-        ob[2]=list.get(i).getPost();
-        modeloEmployee.addRow(ob);
-        
-    }tableEmployee.setModel(modeloEmployee);
-    
+    public void ListarEmployee(){
+
+        List<employee> list =daoE.Listar();
+        modeloEmployee=(DefaultTableModel) tableEmployee.getModel();
+
+        Object[] ob=new Object[3];
+        for (int i=0;i<list.size();i++){
+            ob[0]=list.get(i).getId();
+            ob[1]=list.get(i).getName();
+            ob[2]=list.get(i).getPost();
+            modeloEmployee.addRow(ob);
+        }
+        tableEmployee.setModel(modeloEmployee);
+
     }
     
+    
+    void clearTableArea(){
+        for (int i=0;i<modeloArea.getRowCount();i++){
+            modeloArea.removeRow(i);
+            i=0-1;
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -210,7 +231,7 @@ public class Menu extends javax.swing.JFrame {
                 "Codigo", "Area"
             }
         ));
-        tablearea.setCellSelectionEnabled(true);
+        tablearea.setShowGrid(true);
         jScrollPane2.setViewportView(tablearea);
 
         btnAgregar.setText("+");
@@ -299,8 +320,8 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-                areaVista a=new areaVista();
-                a.setVisible(true);
+                areaVista ventanaAdicionarArea = new areaVista(this);
+                ventanaAdicionarArea.setVisible(true);
                 //dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -314,13 +335,6 @@ public class Menu extends javax.swing.JFrame {
                 new Menu().setVisible(true);
             }
         });
-    }
-
-    void clearTableArea(){
-        for (int i=0;i<modeloArea.getRowCount();i++){
-            modeloArea.removeRow(i);
-            i=0-1;
-        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

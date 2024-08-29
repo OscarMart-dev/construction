@@ -9,7 +9,6 @@ import Dao.DaoEmployee;
 import Modelo.area;
 import Modelo.employee;
 import java.util.List;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 public class infoEmployee extends javax.swing.JFrame {
 
@@ -39,17 +38,7 @@ public class infoEmployee extends javax.swing.JFrame {
         List<area> areas = dao.obtenerAreas();
         for (area areaObj : areas) {
         cmbarea.addItem(areaObj.getName());
-        JComboBox<ComboItem> comboBox = new JComboBox<>();
-        comboBox.addItem(new ComboItem("A", "Activo"));
-        comboBox.addItem(new ComboItem("I", "Inactivo"));
-        ComboItem selectedItem = (ComboItem) comboBox.getSelectedItem();
         
-        //con esto se obtiene los datos de la lista esta quemada por el momento
-        if (selectedItem != null) {
-            String id = selectedItem.getId();
-            String state = selectedItem.getState();
-
-        }
     }
         
     }
