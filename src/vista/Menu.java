@@ -88,6 +88,7 @@ public class Menu extends javax.swing.JFrame {
         parea = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablearea = new javax.swing.JTable();
+        btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,7 +118,6 @@ public class Menu extends javax.swing.JFrame {
         });
         tableEmployee.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tableEmployee.setShowGrid(true);
-        tableEmployee.setShowHorizontalLines(true);
         tableEmployee.setShowVerticalLines(true);
         tableEmployee.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -196,6 +196,11 @@ public class Menu extends javax.swing.JFrame {
 
         parea.setBackground(new java.awt.Color(255, 255, 255));
 
+        tablearea = new javax.swing.JTable(){
+            public boolean isCellEditable (int row,int column){
+                return false;
+            }
+        };
         tablearea.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         tablearea.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -208,13 +213,27 @@ public class Menu extends javax.swing.JFrame {
         tablearea.setCellSelectionEnabled(true);
         jScrollPane2.setViewportView(tablearea);
 
+        btnAgregar.setText("+");
+        btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseClicked(evt);
+            }
+        });
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pareaLayout = new javax.swing.GroupLayout(parea);
         parea.setLayout(pareaLayout);
         pareaLayout.setHorizontalGroup(
             pareaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pareaLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pareaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAgregar)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
         pareaLayout.setVerticalGroup(
@@ -222,7 +241,9 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(pareaLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAgregar)
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         panel.addTab("Area", parea);
@@ -273,6 +294,16 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tableEmployeeMouseClicked
 
+    private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
+                    
+    }//GEN-LAST:event_btnAgregarMouseClicked
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+                areaVista a=new areaVista();
+                a.setVisible(true);
+                //dispose();
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -293,6 +324,7 @@ public class Menu extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

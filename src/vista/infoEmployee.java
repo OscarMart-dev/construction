@@ -43,6 +43,7 @@ public class infoEmployee extends javax.swing.JFrame {
         comboBox.addItem(new ComboItem("A", "Activo"));
         comboBox.addItem(new ComboItem("I", "Inactivo"));
         ComboItem selectedItem = (ComboItem) comboBox.getSelectedItem();
+        
         //con esto se obtiene los datos de la lista esta quemada por el momento
         if (selectedItem != null) {
             String id = selectedItem.getId();
@@ -116,8 +117,6 @@ public class infoEmployee extends javax.swing.JFrame {
         jLabel11.setText("Estado");
 
         txtdocumento.setEnabled(false);
-
-        cmbstate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
 
         btnaceptar.setText("Aceptar");
 
