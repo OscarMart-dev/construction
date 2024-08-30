@@ -5,17 +5,23 @@
 package vista;
 
 import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
+import Modelo.area;
 import Dao.DaoArea;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author oscar
  */
-public class areaVista extends javax.swing.JFrame {
+public class infoVista extends javax.swing.JFrame {
         
     DaoArea area=new DaoArea();
     private Menu menu;
+
+    private infoVista() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
     public Menu getMenu() {
         return menu;
@@ -25,17 +31,34 @@ public class areaVista extends javax.swing.JFrame {
         this.menu = menu;
     }
     
-    public areaVista() {
+    public infoVista(Menu menu, String nro_registro) throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
         area.Listar();
+        this.setMenu(menu);
+        
+        DaoArea dao=new DaoArea(); /*se importa la clase users*/
+        area areaDatos=dao.consultar(nro_registro);
+        txtId.setText(String.valueOf(areaDatos.getCode()));//se carga con el id pero no se ve
+        txtarea.setText(String.valueOf(areaDatos.getName()));
+        char state = areaDatos.getState();
+        System.out.println("vista.infoVista.<init>()"+state);
+        String stateString = String.valueOf(state);
+        System.out.println("vista.infoVista.<init>()"+state);
+        String stateName;
+        if("A".equals(stateString)){
+            stateName="Activo";
+        }else {
+            stateName="Inactivo";
+        }
+        cmbState.setSelectedItem(stateName);
     }
 
-    areaVista(Menu menu) {
+    infoVista(Menu menu) {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
         area.Listar();
-        this.menu = menu;
+        this.setMenu(menu);
         
     }
     
@@ -54,8 +77,9 @@ public class areaVista extends javax.swing.JFrame {
         cmbState = new javax.swing.JComboBox<>();
         lblArea1 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
+        txtId = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lblArea.setText("Area");
 
@@ -70,29 +94,37 @@ public class areaVista extends javax.swing.JFrame {
             }
         });
 
+        txtId.setEditable(false);
+        txtId.setText("jTextField1");
+        txtId.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblArea, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(cmbState, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnAceptar))
-                        .addComponent(txtarea, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblArea, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbState, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAceptar))
+                    .addComponent(txtarea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(lblArea)
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblArea)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtarea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -100,7 +132,7 @@ public class areaVista extends javax.swing.JFrame {
                     .addComponent(cmbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblArea1)
                     .addComponent(btnAceptar))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -108,15 +140,18 @@ public class areaVista extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         DaoArea Darea = new DaoArea();
-        String inputArea= txtarea.getText();
+        
+        String idtext=txtId.getText();
+         int id =Integer.parseInt(idtext);
+        String name= txtarea.getText();
         char state;
-            if (inputArea != null && !inputArea.trim().isEmpty()) {
+            if (name != null && !name.trim().isEmpty()) {
                 if (cmbState.getSelectedItem()=="Activo"){
                         state='A';
                     }else {
                         state='I';
                 }
-                    Darea.create(inputArea, state);
+                    Darea.actualizar(id,name,state);
                     this.getMenu().ListarArea();
                     dispose();
             }else {
@@ -144,21 +179,23 @@ public class areaVista extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(areaVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(areaVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(areaVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(areaVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new areaVista().setVisible(true);
+                new infoVista().setVisible(true);
             }
         });
     }
@@ -168,6 +205,7 @@ public class areaVista extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbState;
     private javax.swing.JLabel lblArea;
     private javax.swing.JLabel lblArea1;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtarea;
     // End of variables declaration//GEN-END:variables
 }

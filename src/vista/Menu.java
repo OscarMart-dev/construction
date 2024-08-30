@@ -9,8 +9,13 @@ import Modelo.area;
 import Modelo.employee;
 import Dao.DaoArea;
 import Dao.DaoEmployee;
+import Dao.DaoPost;
+import Modelo.post;
+import java.sql.SQLException;
 //import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,11 +25,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Menu extends javax.swing.JFrame {
 
-   // area ar=new area();
+   // area listado;
     private DaoArea area;
-    DaoEmployee daoE=new DaoEmployee();
     DefaultTableModel modeloArea=new DefaultTableModel();
+   // cargo listado; 
+    private DaoPost post;
+    DefaultTableModel modeloCargo=new DefaultTableModel();
+    
+    DaoEmployee daoE=new DaoEmployee();
     DefaultTableModel modeloEmployee=new DefaultTableModel();
+    
     /**
      * @return the area
      */
@@ -40,17 +50,49 @@ public class Menu extends javax.swing.JFrame {
     }
     
     
+    /**
+     * @param area the area to set
+     */
+    public void setPost(DaoPost post) {
+        this.post = post;
+    }
+    
+    public DaoPost getPost() {
+        return post;
+    }
+
+    
     public Menu() {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
-        this.setArea(new DaoArea());
         
-        this.ListarArea();//inicializar la lista cada vez que retorne al menu 
+        //inicializar la lista Area
+        this.setArea(new DaoArea());
+        this.ListarArea();
+        this.setPost(new DaoPost());
+        this.ListarCargo();
+        //inicializar la lista empleado
         this.ListarEmployee();
     }
     
     public void ListarArea(){
         List<area> list = this.getArea().Listar();
+        modeloArea = (DefaultTableModel) tablearea.getModel();
+        clearTableArea();
+        
+        Object[] ob = new Object[2];
+        
+        for (int i=0;i<list.size();i++){
+            ob[0]=list.get(i).getCode();
+            ob[1]=list.get(i).getName();
+            modeloArea.addRow(ob);
+        }
+        
+        tablearea.setModel(modeloArea);
+    }
+    
+    public void ListarAreaBuscar(String busqueda){
+        List<area> list = this.getArea().ListarBuscarArea(busqueda);
         modeloArea = (DefaultTableModel) tablearea.getModel();
         clearTableArea();
         
@@ -81,6 +123,23 @@ public class Menu extends javax.swing.JFrame {
 
     }
     
+    public void ListarCargo(){
+        List<post> list =this.getPost().ListarCargo();
+        modeloCargo = (DefaultTableModel) tableCargo.getModel();
+        clearTableCargo();
+        
+        Object[] ob = new Object[4];
+        
+        for (int i=0;i<list.size();i++){
+            ob[0]=list.get(i).getId();
+            ob[1]=list.get(i).getName();
+            ob[2]=list.get(i).getAreaName();
+            ob[3]=list.get(i).getStateName();
+            modeloCargo.addRow(ob);
+        }
+        
+        tableCargo.setModel(modeloCargo);
+    }
     
     void clearTableArea(){
         for (int i=0;i<modeloArea.getRowCount();i++){
@@ -89,6 +148,13 @@ public class Menu extends javax.swing.JFrame {
         }
     }
     
+    
+    void clearTableCargo(){
+        for (int i=0;i<modeloCargo.getRowCount();i++){
+            modeloCargo.removeRow(i);
+            i=0-1;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,15 +169,25 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tableEmployee = new javax.swing.JTable();
         pusers = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        txtBuscarUsuario = new javax.swing.JTextField();
+        btnBuscarUsuario = new javax.swing.JButton();
+        btnAgregarUsuario = new javax.swing.JButton();
         ppost = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableCargo = new javax.swing.JTable();
+        jTextField2 = new javax.swing.JTextField();
+        btnBuscarCargo = new javax.swing.JButton();
+        btnAgregarCargo = new javax.swing.JButton();
         parea = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablearea = new javax.swing.JTable();
         btnAgregar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        txtBuscarArea = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         pemployee.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -168,33 +244,83 @@ public class Menu extends javax.swing.JFrame {
 
         pusers.setBackground(new java.awt.Color(255, 255, 255));
 
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Usuario", "Nombre", "Estado"
+            }
+        ));
+        jScrollPane4.setViewportView(jTable2);
+
+        btnBuscarUsuario.setText("Buscar");
+
+        btnAgregarUsuario.setText("+");
+
         javax.swing.GroupLayout pusersLayout = new javax.swing.GroupLayout(pusers);
         pusers.setLayout(pusersLayout);
         pusersLayout.setHorizontalGroup(
             pusersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 592, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pusersLayout.createSequentialGroup()
+                .addContainerGap(36, Short.MAX_VALUE)
+                .addGroup(pusersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAgregarUsuario)
+                    .addGroup(pusersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pusersLayout.createSequentialGroup()
+                            .addComponent(txtBuscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnBuscarUsuario))))
+                .addGap(34, 34, 34))
         );
         pusersLayout.setVerticalGroup(
             pusersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 376, Short.MAX_VALUE)
+            .addGroup(pusersLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addGroup(pusersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBuscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscarUsuario))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAgregarUsuario)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         panel.addTab("Usuarios", pusers);
 
         ppost.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableCargo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Codigo", "Nombre", "Area", "Estado"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableCargo.setShowGrid(true);
+        tableCargo.setShowHorizontalLines(true);
+        tableCargo.setShowVerticalLines(true);
+        tableCargo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableCargoMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableCargo);
+
+        btnBuscarCargo.setText("Buscar");
+
+        btnAgregarCargo.setText("+");
 
         javax.swing.GroupLayout ppostLayout = new javax.swing.GroupLayout(ppost);
         ppost.setLayout(ppostLayout);
@@ -202,15 +328,28 @@ public class Menu extends javax.swing.JFrame {
             ppostLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ppostLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(ppostLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAgregarCargo)
+                    .addGroup(ppostLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ppostLayout.createSequentialGroup()
+                            .addComponent(jTextField2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnBuscarCargo))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
         ppostLayout.setVerticalGroup(
             ppostLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ppostLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addGroup(ppostLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscarCargo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAgregarCargo)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         panel.addTab("Cargo", ppost);
@@ -232,6 +371,11 @@ public class Menu extends javax.swing.JFrame {
             }
         ));
         tablearea.setShowGrid(true);
+        tablearea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableareaMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablearea);
 
         btnAgregar.setText("+");
@@ -246,22 +390,38 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pareaLayout = new javax.swing.GroupLayout(parea);
         parea.setLayout(pareaLayout);
         pareaLayout.setHorizontalGroup(
             pareaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pareaLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(40, 40, 40)
                 .addGroup(pareaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnAgregar)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pareaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pareaLayout.createSequentialGroup()
+                            .addComponent(txtBuscarArea)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnBuscar))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
         pareaLayout.setVerticalGroup(
             pareaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pareaLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addGroup(pareaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBuscar)
+                    .addComponent(txtBuscarArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAgregar)
                 .addContainerGap(58, Short.MAX_VALUE))
@@ -294,7 +454,7 @@ public class Menu extends javax.swing.JFrame {
        
     private void tableEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableEmployeeMouseClicked
           
-        // TODO add your handling code here:
+        
         //obtener la fila
         int row = tableEmployee.getSelectedRow();
         //obtener la columna
@@ -325,6 +485,63 @@ public class Menu extends javax.swing.JFrame {
                 //dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    private void tableareaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableareaMouseClicked
+            int row = tablearea.getSelectedRow();
+        //obtener la columna
+        int column = tablearea.getSelectedColumn();
+        //si la columna es la 1era
+        if (column == 0) {
+            DefaultTableModel model = (DefaultTableModel) tablearea.getModel();
+            Object value = model.getValueAt(row, column);
+            String nro_registro = (value != null) ? value.toString() : null; //se convierte el valor a string
+            if (nro_registro != null && !nro_registro.isEmpty()) {
+                // Crear y mostrar la ventana emergente con la información del empleado
+                infoVista infoVista = null;
+                try {
+                    infoVista = new infoVista(this, nro_registro);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                infoVista.setVisible(true);
+                System.out.println("vista.Menu.tableareaMouseClicked()"+nro_registro);
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay información disponible para este registro.");
+            }
+        }
+    }//GEN-LAST:event_tableareaMouseClicked
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String busqueda =txtBuscarArea.getText();
+        ListarAreaBuscar(busqueda);
+        
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void tableCargoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCargoMouseClicked
+        int row = tableCargo.getSelectedRow();
+        //obtener la columna
+        int column = tableCargo.getSelectedColumn();
+        //si la columna es la 1era
+        if (column == 0) {
+            DefaultTableModel model = (DefaultTableModel) tableCargo.getModel();
+            Object value = model.getValueAt(row, column);
+            String nro_registro = (value != null) ? value.toString() : null; //se convierte el valor a string
+            if (nro_registro != null && !nro_registro.isEmpty()) {
+                // Crear y mostrar la ventana emergente con la información del empleado
+                infoVista infoVista = null;
+                try {
+                    infoVista = new infoVista(this, nro_registro);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                infoVista.setVisible(true);
+                System.out.println("vista.Menu.tableareaMouseClicked()"+nro_registro);
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay información disponible para este registro.");
+            }
+        }
+
+    }//GEN-LAST:event_tableCargoMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -339,16 +556,26 @@ public class Menu extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnAgregarCargo;
+    private javax.swing.JButton btnAgregarUsuario;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscarCargo;
+    private javax.swing.JButton btnBuscarUsuario;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTabbedPane panel;
     private javax.swing.JPanel parea;
     private javax.swing.JPanel pemployee;
     private javax.swing.JPanel ppost;
     private javax.swing.JPanel pusers;
+    private javax.swing.JTable tableCargo;
     private javax.swing.JTable tableEmployee;
     private javax.swing.JTable tablearea;
+    private javax.swing.JTextField txtBuscarArea;
+    private javax.swing.JTextField txtBuscarUsuario;
     // End of variables declaration//GEN-END:variables
 }

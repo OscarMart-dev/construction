@@ -38,7 +38,6 @@ public class infoEmployee extends javax.swing.JFrame {
         List<area> areas = dao.obtenerAreas();
         for (area areaObj : areas) {
         cmbarea.addItem(areaObj.getName());
-        
     }
         
     }
