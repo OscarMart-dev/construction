@@ -55,8 +55,6 @@ public class areaVista extends javax.swing.JFrame {
         lblArea1 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-
         lblArea.setText("Area");
 
         cmbState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));

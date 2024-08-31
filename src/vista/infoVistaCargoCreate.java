@@ -15,17 +15,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import vista.Menu;
+
 
 /**
  *
  * @author oscar
  */
-public class infoVistaCargo extends javax.swing.JFrame {
+public class infoVistaCargoCreate extends javax.swing.JFrame {
         
     DaoPost cargo=new DaoPost();
     private Menu menu;
 
-    private infoVistaCargo() {
+    private infoVistaCargoCreate() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -37,50 +39,19 @@ public class infoVistaCargo extends javax.swing.JFrame {
         this.menu = menu;
     }
     
-    public infoVistaCargo(Menu menu,String nro_registro) throws SQLException {
+    public infoVistaCargoCreate(Menu menu) throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
+        txtId.setVisible(false);
         cargo.ListarCargo();
         this.menu = menu;
-        DaoPost dao=new DaoPost(); 
-        post cargoDatos=dao.consultarCargo(nro_registro);
-        txtId.setText(String.valueOf(cargoDatos.getId()));//se carga con el id pero no se ve
-        txtId.setVisible(false);
-        txtCargo.setText(String.valueOf(cargoDatos.getName()));
-        int idArea =cargoDatos.getArea();
-        char state = cargoDatos.getState();
-        String stateString = String.valueOf(state);
-        
-        //ya que la funcion esta en empleados se reutiliza
-        DaoEmployee daoE=new DaoEmployee();
+        DaoEmployee daoE=new DaoEmployee(); //listado de areas
         List<area> areas = daoE.obtenerAreas();
         for (area areaObj : areas) {
         String areaName =(areaObj.getName());//se almacena en una variable para evitar Dise�o
         cmbAreaCargo.addItem(areaName);
-        System.out.println("Nombre agregado: " + areaName);
         }
-        
-        //se debe identificar el texto a asignar por el codigo que esta en idArea
-        DaoArea daoA=new DaoArea();
-        String idAreaString = daoA.nombreArea(idArea);
-        cmbAreaCargo.setSelectedItem(idAreaString);
-        
-        //esto es para obtener el estado
-        String stateName;
-        if("A".equals(stateString)){
-            stateName="Activo";
-        }else {
-            stateName="Inactivo";
-        }
-        cmbStateCargo.setSelectedItem(stateName);
-        
-    }
 
-    infoVistaCargo(Menu menu) {
-        initComponents();
-        this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
-        cargo.ListarCargo();
-        this.menu = menu;
     }
     
 
@@ -97,7 +68,7 @@ public class infoVistaCargo extends javax.swing.JFrame {
         lblCargo = new javax.swing.JLabel();
         cmbStateCargo = new javax.swing.JComboBox<>();
         lblArea1 = new javax.swing.JLabel();
-        btnAceptarCargo = new javax.swing.JButton();
+        btnCrearCargo = new javax.swing.JButton();
         lblCargoArea = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         cmbAreaCargo = new javax.swing.JComboBox<>();
@@ -108,10 +79,10 @@ public class infoVistaCargo extends javax.swing.JFrame {
 
         lblArea1.setText("Estado");
 
-        btnAceptarCargo.setText("Aceptar");
-        btnAceptarCargo.addActionListener(new java.awt.event.ActionListener() {
+        btnCrearCargo.setText("Crear");
+        btnCrearCargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAceptarCargoActionPerformed(evt);
+                btnCrearCargoActionPerformed(evt);
             }
         });
 
@@ -132,7 +103,7 @@ public class infoVistaCargo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbStateCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(81, 81, 81)
-                        .addComponent(btnAceptarCargo))
+                        .addComponent(btnCrearCargo))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -161,54 +132,40 @@ public class infoVistaCargo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbStateCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblArea1)
-                    .addComponent(btnAceptarCargo))
+                    .addComponent(btnCrearCargo))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAceptarCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarCargoActionPerformed
+    private void btnCrearCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCargoActionPerformed
         DaoPost DCargo = new DaoPost();
-        String idtext=txtId.getText();
-        int id;
-        
-            try {
-                id = Integer.parseInt(idtext);
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(null, "ID no es un número válido.");
-                    return; // Salir del método si el ID no es válido
+        String inputcargo= txtCargo.getText();
+        char stateCargo;
+                if (cmbStateCargo.getSelectedItem()=="Activo"){
+                        stateCargo='A';
+                    }else {
+                        stateCargo='I';
                     }
-        String name= txtCargo.getText();
+        
         String areaName = (String) cmbAreaCargo.getSelectedItem();
-        if (areaName == null || areaName.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Seleccione un área válida.");
-            return; // Salir del método si no hay un área seleccionada
-}   
-        //se obtiene el id por el nombre en el combo box area//
         DaoArea daoA=new DaoArea();
         int idArea = 0;
         try {
             idArea = daoA.retornaAreaId(areaName);
         } catch (SQLException ex) {
-            Logger.getLogger(infoVistaCargo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        char state;
-            // Comparar cadenas correctamente
-                if ("Activo".equals(cmbStateCargo.getSelectedItem().toString())) {
-                        state = 'A';
-                } else {
-                        state = 'I';
-                }
-                       
-    // Verificar que el nombre no esté vacío y que no haya un registro con el mismo nombre
-                if (name != null && !name.trim().isEmpty()) {
-                     try {
-                                boolean existe = DCargo.nombreExiste(name,id);
+            Logger.getLogger(infoVistaCargoCreate.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+            if (inputcargo != null && !inputcargo.trim().isEmpty()) { //primero se verifica que no este vacio el registro
+                
+                try {
+                                boolean existe = DCargo.registroExiste(inputcargo);
                             if (existe) {
-                                JOptionPane.showMessageDialog(null, "Ya existe un registro con nombre "+name);
+                                JOptionPane.showMessageDialog(null, "Ya existe un registro con nombre "+inputcargo);
                             } else {
-                                DCargo.actualizar(id, name,idArea, state);
+                                DCargo.createCargo(inputcargo,idArea, stateCargo);
                                 this.getMenu().ListarCargo();// Asumiendo que esto actualiza la lista de áreas
                                 dispose();}
                             
@@ -216,10 +173,11 @@ public class infoVistaCargo extends javax.swing.JFrame {
                                 JOptionPane.showMessageDialog(null, "Error al verificar el registro: " + e.getMessage());
                                     e.printStackTrace(); // Para depuración
                             }
-                } else {
-                        JOptionPane.showMessageDialog(null, "Registro vacío");
-                }
-    }//GEN-LAST:event_btnAceptarCargoActionPerformed
+                
+            }else {
+            JOptionPane.showMessageDialog(null, "Registro vacío");
+            }
+    }//GEN-LAST:event_btnCrearCargoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -238,14 +196,22 @@ public class infoVistaCargo extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(infoVistaCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoVistaCargoCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(infoVistaCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoVistaCargoCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(infoVistaCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoVistaCargoCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(infoVistaCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoVistaCargoCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -256,15 +222,13 @@ public class infoVistaCargo extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new infoVistaCargo().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+new infoVistaCargoCreate().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAceptarCargo;
+    private javax.swing.JButton btnCrearCargo;
     private javax.swing.JComboBox<String> cmbAreaCargo;
     private javax.swing.JComboBox<String> cmbStateCargo;
     private javax.swing.JLabel lblArea1;

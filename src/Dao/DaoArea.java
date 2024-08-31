@@ -41,6 +41,25 @@ public class DaoArea {
         return list;
     }
     
+    
+    public List ListarAreaCargo(){
+        List<area> list = new ArrayList<>();
+        String sql="select * from are_area where arec_estado ='A'";//dentro del listado de cargos solo se veran estados activos
+        try{
+            con=cn.conectar();
+            ps=con.prepareStatement(sql);
+            rs=ps.executeQuery();
+            while (rs.next()){
+            area a=new area();
+            a.setCode(rs.getInt(1));
+            a.setName(rs.getString(2));
+            list.add(a);
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        return list;
+    }
     public List ListarBuscarArea(String busqueda ){
         List<area> list = new ArrayList<>();
         String sql="select * from are_area where arec_name like '%"+busqueda+"%' or aren_id like '%"+busqueda+"%';";
@@ -123,7 +142,57 @@ public class DaoArea {
                 return modeloArea;
             }
         
+        public String nombreArea (int id){
+                String nombre=null;
+            String sql = "select arec_name from are_area where aren_id='"+id+"'";
+             try {
+                 con=cn.conectar();
+                 ps=con.prepareStatement(sql);
+                 rs=ps.executeQuery();
+                 while (rs.next()){
+                 nombre=(rs.getString(1));
+                    // System.out.println("obtenida el area ahora "+nombre);    
+                 }  
+            }catch(SQLException e){
+                    JOptionPane.showConfirmDialog(null,"Error obteniendo el area "+rs);
+            } finally {
+        // Cierra los recursos para evitar fugas de memoria
+                try {
+                    if (rs != null) rs.close();
+                    if (ps != null) ps.close();
+                    if (con != null) con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+                return nombre;
         
+        }
+        
+        public int retornaAreaId(String name) throws SQLException {
+            int id = 0;
+            String sql = "select aren_id from are_area where arec_name ='"+name+"'";
+             try {
+                 con=cn.conectar();
+                 ps=con.prepareStatement(sql);
+                 rs=ps.executeQuery();
+                 while (rs.next()){
+                 id=(rs.getInt(1));
+            }  
+        }catch(SQLException e){
+            JOptionPane.showConfirmDialog(null,"read");
+            }finally {
+        // Cierra los recursos para evitar fugas de memoria
+                try {
+                    if (rs != null) rs.close();
+                    if (ps != null) ps.close();
+                    if (con != null) con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+                return id ;
+            }
  }
 
 

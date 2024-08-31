@@ -36,7 +36,7 @@ public class infoVista extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
         area.Listar();
         this.setMenu(menu);
-        
+        txtId.setVisible(false);
         DaoArea dao=new DaoArea(); /*se importa la clase users*/
         area areaDatos=dao.consultar(nro_registro);
         txtId.setText(String.valueOf(areaDatos.getCode()));//se carga con el id pero no se ve
@@ -78,8 +78,6 @@ public class infoVista extends javax.swing.JFrame {
         lblArea1 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
         txtId = new javax.swing.JTextField();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lblArea.setText("Area");
 

@@ -309,8 +309,6 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         tableCargo.setShowGrid(true);
-        tableCargo.setShowHorizontalLines(true);
-        tableCargo.setShowVerticalLines(true);
         tableCargo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableCargoMouseClicked(evt);
@@ -321,6 +319,16 @@ public class Menu extends javax.swing.JFrame {
         btnBuscarCargo.setText("Buscar");
 
         btnAgregarCargo.setText("+");
+        btnAgregarCargo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAgregarCargoMouseClicked(evt);
+            }
+        });
+        btnAgregarCargo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCargoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout ppostLayout = new javax.swing.GroupLayout(ppost);
         ppost.setLayout(ppostLayout);
@@ -527,13 +535,13 @@ public class Menu extends javax.swing.JFrame {
             String nro_registro = (value != null) ? value.toString() : null; //se convierte el valor a string
             if (nro_registro != null && !nro_registro.isEmpty()) {
                 // Crear y mostrar la ventana emergente con la información del empleado
-                infoVista infoVista = null;
+                infoVistaCargo infoVistaCargo = null;
                 try {
-                    infoVista = new infoVista(this, nro_registro);
+                    infoVistaCargo = new infoVistaCargo(this, nro_registro);
                 } catch (SQLException ex) {
                     Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                infoVista.setVisible(true);
+                infoVistaCargo.setVisible(true);
                 System.out.println("vista.Menu.tableareaMouseClicked()"+nro_registro);
             } else {
                 JOptionPane.showMessageDialog(null, "No hay información disponible para este registro.");
@@ -541,6 +549,20 @@ public class Menu extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_tableCargoMouseClicked
+
+    private void btnAgregarCargoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarCargoMouseClicked
+            
+    }//GEN-LAST:event_btnAgregarCargoMouseClicked
+
+    private void btnAgregarCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCargoActionPerformed
+                infoVistaCargoCreate ventanaAdicionarCargo = null;
+        try {
+            ventanaAdicionarCargo = new infoVistaCargoCreate(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                ventanaAdicionarCargo.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarCargoActionPerformed
 
     /**
      * @param args the command line arguments
