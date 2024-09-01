@@ -11,6 +11,8 @@ import Dao.DaoArea;
 import Dao.DaoEmployee;
 import Dao.DaoPost;
 import Modelo.post;
+import Dao.DaoUsers;
+import Modelo.users;
 import java.sql.SQLException;
 //import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,9 @@ public class Menu extends javax.swing.JFrame {
     DaoEmployee daoE=new DaoEmployee();
     DefaultTableModel modeloEmployee=new DefaultTableModel();
     
+    private DaoUsers users;
+    DefaultTableModel modeloUsers=new DefaultTableModel();
+    
     /**
      * @return the area
      */
@@ -49,6 +54,16 @@ public class Menu extends javax.swing.JFrame {
         this.area = area;
     }
     
+    public DaoUsers getUsers() {
+        return users;
+    }
+
+    /**
+     * @param area the area to set
+     */
+    public void setUsers(DaoUsers users) {
+        this.users = users;
+    }
     
     /**
      * @param area the area to set
@@ -73,6 +88,25 @@ public class Menu extends javax.swing.JFrame {
         this.ListarCargo();
         //inicializar la lista empleado
         this.ListarEmployee();
+        this.setUsers(new DaoUsers());
+        this.ListarUser();
+    }
+    
+    public void ListarUser(){
+        List<users> list = this.getUsers().ListarUsuario();
+        modeloUsers = (DefaultTableModel) tableUsers.getModel();
+        clearTableUsers();
+        
+        Object[] ob = new Object[3];
+        
+        for (int i=0;i<list.size();i++){
+            ob[0]=list.get(i).getCode();
+            ob[1]=list.get(i).getName();
+            ob[2]=list.get(i).getState();
+            modeloUsers.addRow(ob);
+        }
+        
+        tableUsers.setModel(modeloUsers);
     }
     
     public void ListarArea(){
@@ -107,6 +141,7 @@ public class Menu extends javax.swing.JFrame {
         tablearea.setModel(modeloArea);
     }
     
+     
     public void ListarEmployee(){
 
         List<employee> list =daoE.Listar();
@@ -141,6 +176,24 @@ public class Menu extends javax.swing.JFrame {
         tableCargo.setModel(modeloCargo);
     }
     
+    public void ListarCargoBuscar(String busqueda){
+        List<post> list = this.getPost().ListarBuscarCargo(busqueda);
+        modeloCargo = (DefaultTableModel) tableCargo.getModel();
+        clearTableCargo();
+        
+        Object[] ob = new Object[4];
+        
+        for (int i=0;i<list.size();i++){
+             ob[0]=list.get(i).getId();
+            ob[1]=list.get(i).getName();
+            ob[2]=list.get(i).getAreaName();
+            ob[3]=list.get(i).getStateName();
+            modeloCargo.addRow(ob);
+        }
+        
+        tableCargo.setModel(modeloCargo);
+    }
+    
     void clearTableArea(){
         for (int i=0;i<modeloArea.getRowCount();i++){
             modeloArea.removeRow(i);
@@ -152,6 +205,13 @@ public class Menu extends javax.swing.JFrame {
     void clearTableCargo(){
         for (int i=0;i<modeloCargo.getRowCount();i++){
             modeloCargo.removeRow(i);
+            i=0-1;
+        }
+    }
+    
+    void clearTableUsers(){
+        for (int i=0;i<modeloUsers.getRowCount();i++){
+            modeloUsers.removeRow(i);
             i=0-1;
         }
     }
@@ -170,14 +230,14 @@ public class Menu extends javax.swing.JFrame {
         tableEmployee = new javax.swing.JTable();
         pusers = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableUsers = new javax.swing.JTable();
         txtBuscarUsuario = new javax.swing.JTextField();
         btnBuscarUsuario = new javax.swing.JButton();
         btnAgregarUsuario = new javax.swing.JButton();
         ppost = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCargo = new javax.swing.JTable();
-        jTextField2 = new javax.swing.JTextField();
+        txtBuscarCargo = new javax.swing.JTextField();
         btnBuscarCargo = new javax.swing.JButton();
         btnAgregarCargo = new javax.swing.JButton();
         parea = new javax.swing.JPanel();
@@ -244,7 +304,7 @@ public class Menu extends javax.swing.JFrame {
 
         pusers.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tableUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -252,11 +312,16 @@ public class Menu extends javax.swing.JFrame {
                 "Usuario", "Nombre", "Estado"
             }
         ));
-        jScrollPane4.setViewportView(jTable2);
+        jScrollPane4.setViewportView(tableUsers);
 
         btnBuscarUsuario.setText("Buscar");
 
         btnAgregarUsuario.setText("+");
+        btnAgregarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pusersLayout = new javax.swing.GroupLayout(pusers);
         pusers.setLayout(pusersLayout);
@@ -317,6 +382,11 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableCargo);
 
         btnBuscarCargo.setText("Buscar");
+        btnBuscarCargo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarCargoActionPerformed(evt);
+            }
+        });
 
         btnAgregarCargo.setText("+");
         btnAgregarCargo.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -340,7 +410,7 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(btnAgregarCargo)
                     .addGroup(ppostLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ppostLayout.createSequentialGroup()
-                            .addComponent(jTextField2)
+                            .addComponent(txtBuscarCargo)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(btnBuscarCargo))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -351,7 +421,7 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(ppostLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(ppostLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscarCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscarCargo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -564,6 +634,21 @@ public class Menu extends javax.swing.JFrame {
                 ventanaAdicionarCargo.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarCargoActionPerformed
 
+    private void btnBuscarCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCargoActionPerformed
+            String busqueda =txtBuscarCargo.getText();
+            ListarCargoBuscar(busqueda);
+    }//GEN-LAST:event_btnBuscarCargoActionPerformed
+
+    private void btnAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUsuarioActionPerformed
+             infoVistaUsuarioCreate ventanaAdicionarUsuario = null;
+        try {
+            ventanaAdicionarUsuario = new infoVistaUsuarioCreate(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                ventanaAdicionarUsuario.setVisible(true); 
+    }//GEN-LAST:event_btnAgregarUsuarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -587,8 +672,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTabbedPane panel;
     private javax.swing.JPanel parea;
     private javax.swing.JPanel pemployee;
@@ -596,8 +679,10 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel pusers;
     private javax.swing.JTable tableCargo;
     private javax.swing.JTable tableEmployee;
+    private javax.swing.JTable tableUsers;
     private javax.swing.JTable tablearea;
     private javax.swing.JTextField txtBuscarArea;
+    private javax.swing.JTextField txtBuscarCargo;
     private javax.swing.JTextField txtBuscarUsuario;
     // End of variables declaration//GEN-END:variables
 }

@@ -7,6 +7,9 @@ package vista;
 import Dao.DaoUsers;
 import Modelo.users;
 import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
@@ -129,16 +132,39 @@ users usu=new users();
 
     private void btnsendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsendActionPerformed
         // TODO add your handling code here:
+        boolean existe = false;
+        boolean registro = false;
         usu=dao.login(txtuser.getText(), txtpass.getText());
+        String name =txtuser.getText();
+        System.out.println("usu.getCode()");
         if (usu.getCode()!=null && usu.getPassword()!=null){
-        //JOptionPane.showMessageDialog(null, "Bienvenido");
-        Menu m=new Menu();
-        m.setVisible(true);
-        dispose();
+            try {
+                 existe = dao.verificaEstadoActivo(name);
+                 if (existe) {
+                     System.out.println("El Usuario activo "+name+" ha inciado sesion");
+                        registro = dao.registro(name);
+                        if (registro) {
+                            //System.out.println("El Usuario con pass "+name+" ha inciado sesion");
+                            Menu m=new Menu();
+                            dao.asignaFecha(name);
+                            m.setVisible(true);
+                            dispose();
+                        } else {   
+                             //System.out.println("El Usuario no tiene pass");
+                            asignaContraseña asigna=new asignaContraseña(name);
+                            asigna.setVisible(true);
+                        }    
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Usuario inactivo. Por favor, contacte al administrador.", "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
+                           }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                else {
+                        JOptionPane.showMessageDialog(null, "Acceso Denegado");
         }
-        else {
-        JOptionPane.showMessageDialog(null, "Acceso Denegado");
-        }
+        
     }//GEN-LAST:event_btnsendActionPerformed
 
     private void txtpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtpassActionPerformed

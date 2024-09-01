@@ -46,6 +46,28 @@ public class DaoPost {
         return list;
     }
     
+    public List ListarBuscarCargo(String busqueda){
+        List<post> list = new ArrayList<>();
+        String sql="select * from (select posn_id,posc_name,arec_name,case posc_estado when 'A' then 'Activo' else 'Inactivo' end posc_estado  from pos_post, are_area where posn_are_id=aren_id) post where  posn_id like '%"+busqueda+"%' or  lower(posc_name) like '%"+busqueda+"%' or lower(arec_name) like '%"+busqueda+"%' or  lower(posc_estado) like '%"+busqueda+"%'";
+        try{
+            con=cn.conectar();
+            ps=con.prepareStatement(sql);
+            rs=ps.executeQuery();
+            while (rs.next()){
+            post p=new post();
+            p.setId(rs.getInt(1));
+            p.setName(rs.getString(2));
+            p.setAreaName(rs.getString(3));
+            p.setStateName(rs.getString(4));
+            list.add(p);
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        return list;
+    }
+    
+    
     public post actualizar (int id,String name,int stateArea,char state){
                post modeloPost = null;
                String sql = "update pos_post set posc_name='"+name+"',posn_are_id='"+stateArea+"' ,posc_estado='"+state+"' where posn_id ="+id;
@@ -63,7 +85,7 @@ public class DaoPost {
     
             public post createCargo (String name,int stateArea,char state){
                post modeloPost = null;
-               String sql = "INSERT INTO pos_post (posc_name, posn_are_id, posc_estado) VALUES(?, ?, ?);";
+               String sql = "INSERT INTO pos_post (posc_name, posn_are_id, posc_estado) VALUES('"+name+"',"+stateArea+",'"+state+"');";
                try {
                  con=cn.conectar();
                  ps=con.prepareStatement(sql);
@@ -71,7 +93,8 @@ public class DaoPost {
                  JOptionPane.showMessageDialog(null,"El Cargo "+name+" fue creado");
              }catch(SQLException e){
                     JOptionPane.showMessageDialog(null,"Error crear cargo"+e);
-                   System.out.println("Error"+e);
+                   System.out.println("Error "+e);
+                   System.out.println("el script que se envio fue este"+sql);
                     }
                         return modeloPost;
                     }
