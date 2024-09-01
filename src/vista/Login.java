@@ -38,6 +38,7 @@ users usu=new users();
         txtuser = new javax.swing.JTextField();
         btnsend = new javax.swing.JButton();
         txtpass = new javax.swing.JPasswordField();
+        btnOlvido = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,6 +56,8 @@ users usu=new users();
             }
         });
 
+        btnsend.setBackground(new java.awt.Color(0, 204, 204));
+        btnsend.setForeground(new java.awt.Color(255, 255, 255));
         btnsend.setText("Ingresar");
         btnsend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -79,48 +82,59 @@ users usu=new users();
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(50, 50, 50)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnsend)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel2)
-                                .addComponent(txtuser)
-                                .addComponent(txtpass, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)))))
-                .addContainerGap(57, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(txtpass, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+                            .addComponent(txtuser)
+                            .addComponent(btnsend, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addComponent(jLabel1)
-                .addGap(64, 64, 64)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtuser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(txtpass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(26, 26, 26)
                 .addComponent(btnsend)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
+
+        btnOlvido.setForeground(new java.awt.Color(204, 204, 204));
+        btnOlvido.setText("Olvido su contraseña");
+        btnOlvido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOlvidoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(126, 126, 126)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addGap(100, 100, 100)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnOlvido)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(93, 93, 93)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(97, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnOlvido)
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
         pack();
@@ -171,6 +185,11 @@ users usu=new users();
         // TODO add your handling code here:
     }//GEN-LAST:event_txtpassActionPerformed
 
+    private void btnOlvidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOlvidoActionPerformed
+        validate validar=new validate();
+                    validar.setVisible(true);
+    }//GEN-LAST:event_btnOlvidoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -199,6 +218,7 @@ users usu=new users();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnOlvido;
     private javax.swing.JButton btnsend;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -194,12 +194,31 @@ public class Menu extends javax.swing.JFrame {
         tableCargo.setModel(modeloCargo);
     }
     
+    public void ListarUsuarioBuscar(String busqueda){
+        List<users> list = this.getUsers().ListarUsuarioBuscado(busqueda);
+        modeloUsers = (DefaultTableModel) tableUsers.getModel();
+        clearTableUsers();
+        
+        Object[] ob = new Object[3];
+        
+        for (int i=0;i<list.size();i++){
+            ob[0]=list.get(i).getCode();
+            ob[1]=list.get(i).getName();
+            ob[2]=list.get(i).getState();
+            modeloUsers.addRow(ob);
+        }
+        
+        tableUsers.setModel(modeloUsers);
+    }
+    
+    
     void clearTableArea(){
         for (int i=0;i<modeloArea.getRowCount();i++){
             modeloArea.removeRow(i);
             i=0-1;
         }
     }
+    
     
     
     void clearTableCargo(){
@@ -312,9 +331,20 @@ public class Menu extends javax.swing.JFrame {
                 "Usuario", "Nombre", "Estado"
             }
         ));
+        tableUsers.setShowGrid(true);
+        tableUsers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableUsersMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(tableUsers);
 
         btnBuscarUsuario.setText("Buscar");
+        btnBuscarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarUsuarioActionPerformed(evt);
+            }
+        });
 
         btnAgregarUsuario.setText("+");
         btnAgregarUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -648,6 +678,36 @@ public class Menu extends javax.swing.JFrame {
         }
                 ventanaAdicionarUsuario.setVisible(true); 
     }//GEN-LAST:event_btnAgregarUsuarioActionPerformed
+
+    private void tableUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableUsersMouseClicked
+        int row = tableUsers.getSelectedRow();
+        //obtener la columna
+        int column = tableUsers.getSelectedColumn();
+        //si la columna es la 1era
+        if (column == 0) {
+            DefaultTableModel model = (DefaultTableModel) tableUsers.getModel();
+            Object value = model.getValueAt(row, column);
+            String nro_registro = (value != null) ? value.toString() : null; //se convierte el valor a string
+            if (nro_registro != null && !nro_registro.isEmpty()) {
+                // Crear y mostrar la ventana emergente con la información del empleado
+                infoVistaUsuarioUpdate infoVista = null;
+                try {
+                    infoVista = new infoVistaUsuarioUpdate(this, nro_registro);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                infoVista.setVisible(true);
+                System.out.println("vista.Menu.tableareaMouseClicked()"+nro_registro);
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay información disponible para este registro.");
+            }
+        }
+    }//GEN-LAST:event_tableUsersMouseClicked
+
+    private void btnBuscarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuarioActionPerformed
+            String busqueda =txtBuscarUsuario.getText();
+            ListarUsuarioBuscar(busqueda);
+    }//GEN-LAST:event_btnBuscarUsuarioActionPerformed
 
     /**
      * @param args the command line arguments

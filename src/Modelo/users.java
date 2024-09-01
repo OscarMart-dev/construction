@@ -10,17 +10,27 @@ public class users {
     String email;
     String state;
     LocalDate entry_date;
+    String date;
 
     public users() {
     }
 
-    public users(String code, String name, String password, String email, String state, LocalDate entry_date) {
+    public users(String code, String name, String password, String email, String state, LocalDate entry_date, String date) {
         this.code = code;
         this.name = name;
         this.password = password;
         this.email = email;
         this.state = state;
         this.entry_date = entry_date;
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getCode() {
