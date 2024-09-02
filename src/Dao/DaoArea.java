@@ -169,6 +169,24 @@ public class DaoArea {
         
         }
         
+            public List ListarAreaEmp(){
+            List<area> list = new ArrayList<>();
+            String sql="select arec_name from are_area where arec_estado ='A'";//dentro del listado de cargos solo se veran estados activos
+            try{
+                con=cn.conectar();
+                ps=con.prepareStatement(sql);
+                rs=ps.executeQuery();
+                while (rs.next()){
+                area a=new area();
+                a.setName(rs.getString(1));
+                list.add(a);
+                }
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null,e);
+                }
+                    return list;
+                    }
+        
         public int retornaAreaId(String name) throws SQLException {
             int id = 0;
             String sql = "select aren_id from are_area where arec_name ='"+name+"'";

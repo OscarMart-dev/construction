@@ -228,5 +228,21 @@ public class DaoPost {
             return existe;
         }
 
-
+            public List ListarCargoEmpl(int area){
+           List<post> list = new ArrayList<>();
+           String sql="select posc_name from pos_post where posn_are_id ="+area+" and posc_estado ='A'";
+                try{
+                    con=cn.conectar();
+                    ps=con.prepareStatement(sql);
+                    rs=ps.executeQuery();
+                    while (rs.next()){
+                    post p=new post();
+                    p.setAreaName(rs.getString(1));
+                    list.add(p);
+                    }
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null,e);
+                }
+                return list;
+            }
 }

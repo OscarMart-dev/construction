@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+
 /**
  *
  * @author oscar
@@ -54,6 +55,8 @@ public class Menu extends javax.swing.JFrame {
         this.area = area;
     }
     
+    
+
     public DaoUsers getUsers() {
         return users;
     }
@@ -146,7 +149,7 @@ public class Menu extends javax.swing.JFrame {
 
         List<employee> list =daoE.Listar();
         modeloEmployee=(DefaultTableModel) tableEmployee.getModel();
-
+        clearTableEmployee();
         Object[] ob=new Object[3];
         for (int i=0;i<list.size();i++){
             ob[0]=list.get(i).getId();
@@ -219,6 +222,12 @@ public class Menu extends javax.swing.JFrame {
         }
     }
     
+    void clearTableEmployee(){
+        for (int i=0;i<modeloEmployee.getRowCount();i++){
+            modeloEmployee.removeRow(i);
+            i=0-1;
+        }
+    }
     
     
     void clearTableCargo(){
@@ -247,6 +256,9 @@ public class Menu extends javax.swing.JFrame {
         pemployee = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableEmployee = new javax.swing.JTable();
+        btnAgregarEmpleado = new javax.swing.JButton();
+        txtBuscarEmpleado = new javax.swing.JTextField();
+        btnBuscarEmpleado = new javax.swing.JButton();
         pusers = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tableUsers = new javax.swing.JTable();
@@ -302,21 +314,43 @@ public class Menu extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tableEmployee);
 
+        btnAgregarEmpleado.setText("+");
+        btnAgregarEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarEmpleadoActionPerformed(evt);
+            }
+        });
+
+        btnBuscarEmpleado.setText("Buscar");
+
         javax.swing.GroupLayout pemployeeLayout = new javax.swing.GroupLayout(pemployee);
         pemployee.setLayout(pemployeeLayout);
         pemployeeLayout.setHorizontalGroup(
             pemployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pemployeeLayout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 513, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addContainerGap(44, Short.MAX_VALUE)
+                .addGroup(pemployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pemployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnAgregarEmpleado)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 513, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pemployeeLayout.createSequentialGroup()
+                        .addComponent(txtBuscarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscarEmpleado)))
+                .addGap(35, 35, 35))
         );
         pemployeeLayout.setVerticalGroup(
             pemployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pemployeeLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(pemployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBuscarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscarEmpleado))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAgregarEmpleado)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         panel.addTab("Empleados", pemployee);
@@ -670,7 +704,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarCargoActionPerformed
 
     private void btnAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUsuarioActionPerformed
-             infoVistaUsuarioCreate ventanaAdicionarUsuario = null;
+        infoVistaUsuarioCreate ventanaAdicionarUsuario = null;
         try {
             ventanaAdicionarUsuario = new infoVistaUsuarioCreate(this);
         } catch (SQLException ex) {
@@ -709,6 +743,12 @@ public class Menu extends javax.swing.JFrame {
             ListarUsuarioBuscar(busqueda);
     }//GEN-LAST:event_btnBuscarUsuarioActionPerformed
 
+    private void btnAgregarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEmpleadoActionPerformed
+                infoEmployeeCreate ventanaAdicionarEmpleado = null;
+                ventanaAdicionarEmpleado = new infoEmployeeCreate(this);
+                ventanaAdicionarEmpleado.setVisible(true);  
+    }//GEN-LAST:event_btnAgregarEmpleadoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -724,9 +764,11 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnAgregarCargo;
+    private javax.swing.JButton btnAgregarEmpleado;
     private javax.swing.JButton btnAgregarUsuario;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarCargo;
+    private javax.swing.JButton btnBuscarEmpleado;
     private javax.swing.JButton btnBuscarUsuario;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -743,6 +785,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JTable tablearea;
     private javax.swing.JTextField txtBuscarArea;
     private javax.swing.JTextField txtBuscarCargo;
+    private javax.swing.JTextField txtBuscarEmpleado;
     private javax.swing.JTextField txtBuscarUsuario;
     // End of variables declaration//GEN-END:variables
 }
