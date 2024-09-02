@@ -203,7 +203,7 @@ public class Menu extends javax.swing.JFrame {
         Object[] ob = new Object[4];
         
         for (int i=0;i<list.size();i++){
-             ob[0]=list.get(i).getId();
+            ob[0]=list.get(i).getId();
             ob[1]=list.get(i).getName();
             ob[2]=list.get(i).getAreaName();
             ob[3]=list.get(i).getStateName();
