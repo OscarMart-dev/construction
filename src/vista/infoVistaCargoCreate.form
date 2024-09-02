@@ -75,6 +75,9 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="txtCargo">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCargoKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblCargo">
       <Properties>

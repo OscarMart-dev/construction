@@ -81,6 +81,12 @@ public class infoVistaUsuarioUpdate extends javax.swing.JFrame {
         txtDate = new javax.swing.JTextField();
         btnEliminar = new javax.swing.JButton();
 
+        txtNameUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNameUsuarioKeyTyped(evt);
+            }
+        });
+
         lblNameUsuario.setText("Nombre");
 
         cmbStateUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
@@ -224,6 +230,13 @@ public class infoVistaUsuarioUpdate extends javax.swing.JFrame {
                 System.out.println("no se confirmo");
             }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txtNameUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNameUsuarioKeyTyped
+            char c = evt.getKeyChar();
+            if (!Character.isLetter(c) && c != ' ') {
+                evt.consume(); // Consume el evento si el carácter no es una letra ni un espacio
+                }        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNameUsuarioKeyTyped
 
     /**
      * @param args the command line arguments

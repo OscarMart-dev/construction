@@ -17,13 +17,14 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import vista.Menu;
-public class infoEmployeeCreate extends javax.swing.JFrame {
+public class infoEmployeeUpdate extends javax.swing.JFrame {
 
     
     DaoEmployee daoE=new DaoEmployee();
@@ -44,15 +45,28 @@ public class infoEmployeeCreate extends javax.swing.JFrame {
         this.menu = menu;
     }
     
-    public infoEmployeeCreate() {
+    public infoEmployeeUpdate() {
 
     }
 
-    public infoEmployeeCreate(Menu menu) {
+    public infoEmployeeUpdate(Menu menu,String nro_registro) throws ParseException, SQLException {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
         //listado de area
         this.menu = menu;
+        DaoEmployee dao=new DaoEmployee(); /*se importa la clase users*/
+        employee empDatos=dao.consultar(nro_registro);
+        txtdocumento.setText(String.valueOf(empDatos.getId()));
+        txtname.setText(String.valueOf(empDatos.getName()));
+        //String fechaString = empDatos.getFecha(); 
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //Date fecha = dateFormat.parse(fechaString);
+        DateFecha.setDate(empDatos.getBirthdate());
+        txtaddress.setText(String.valueOf(empDatos.getAddress()));
+        txtphone.setText(String.valueOf(empDatos.getPhone()));
+        txtyear.setText(String.valueOf(empDatos.getYear()));
+        txtemail.setText(String.valueOf(empDatos.getEmail()));
+        int idArea =Integer.parseInt(empDatos.getArea());
         List<area> areas = daoE.obtenerAreas();
         for (area areaObj : areas) {
         String areaName =(areaObj.getName());//se almacena en una variable para evitar Dise�o
@@ -65,9 +79,28 @@ public class infoEmployeeCreate extends javax.swing.JFrame {
                     recalcularPosts();
                 }
             });
-
+            
             // Cálculo inicial
             recalcularPosts();
+            
+            
+            // se asigna el valor por medio de la funcion nombreArea 
+            String idAreaString = darea.nombreArea(idArea);
+            cmbarea.setSelectedItem(idAreaString);
+            
+            int idpost =Integer.parseInt(empDatos.getPost());
+            String nombrePost =daoP.retornaCargoNombre(idpost);
+            cmbpost.setSelectedItem(nombrePost);
+            
+            //se asigna el valor del estado
+        String state = empDatos.getState();
+        String stateName;
+        if("A".equals(state)){
+            stateName="Activo";
+        }else {
+            stateName="Inactivo";
+        }
+        cmbstate.setSelectedItem(stateName);
     }
 
             private void recalcularPosts() {
@@ -77,7 +110,7 @@ public class infoEmployeeCreate extends javax.swing.JFrame {
             try {
                 idArea = darea.retornaAreaId(areaName);
                         } catch (SQLException ex) {
-                            Logger.getLogger(infoEmployeeCreate.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(infoEmployeeUpdate.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
                     if (idArea > 0) {
@@ -307,7 +340,7 @@ public class infoEmployeeCreate extends javax.swing.JFrame {
         try {
             idArea = darea.retornaAreaId(areaName);
         } catch (SQLException ex) {
-            Logger.getLogger(infoEmployeeCreate.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(infoEmployeeUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
         //System.out.println("el id area es "+idArea);
         //se retorna el nombre del cargo
@@ -317,7 +350,7 @@ public class infoEmployeeCreate extends javax.swing.JFrame {
         try {
             idCargo=daoP.retornaCargoId(cargoName);
         } catch (SQLException ex) {
-            Logger.getLogger(infoEmployeeCreate.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(infoEmployeeUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
         String email=txtemail.getText();
         char stateUsuario;
@@ -436,21 +469,23 @@ public class infoEmployeeCreate extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(infoEmployeeCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoEmployeeUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(infoEmployeeCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoEmployeeUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(infoEmployeeCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoEmployeeUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(infoEmployeeCreate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(infoEmployeeUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new infoEmployeeCreate().setVisible(true);
+                new infoEmployeeUpdate().setVisible(true);
             }
         });
     }

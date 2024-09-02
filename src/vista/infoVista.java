@@ -79,6 +79,12 @@ public class infoVista extends javax.swing.JFrame {
         btnAceptar = new javax.swing.JButton();
         txtId = new javax.swing.JTextField();
 
+        txtarea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtareaKeyTyped(evt);
+            }
+        });
+
         lblArea.setText("Area");
 
         cmbState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
@@ -159,6 +165,13 @@ public class infoVista extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void txtareaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtareaKeyTyped
+            char c = evt.getKeyChar();
+            if (!Character.isLetter(c) && c != ' ') {
+                evt.consume(); // Consume el evento si el carácter no es una letra ni un espacio
+                }        // TODO add your handling code here:
+    }//GEN-LAST:event_txtareaKeyTyped
 
     /**
      * @param args the command line arguments

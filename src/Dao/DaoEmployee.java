@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 
 
@@ -45,7 +47,8 @@ public class DaoEmployee {
     
     public employee consultar(String nro_registro){
         employee emp = null;
-        String sql="select empc_name,empn_id,empf_birthdate,empc_address,empn_years_experience,empc_email,empn_post,empc_state,empn_area from emp_employee where empn_id ='"+nro_registro+"'";
+         //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String sql="select empn_id, empc_name, empf_birthdate, empc_address, empn_phone, empn_years_experience, empc_email, empn_post, empc_state, empn_area from emp_employee where empn_id ='"+nro_registro+"'";
         try{
             con=cn.conectar();
             ps=con.prepareStatement(sql);
@@ -54,13 +57,16 @@ public class DaoEmployee {
                 emp=new employee();
                 emp.setName(rs.getString(1));
                 emp.setId(rs.getInt(2));
-                //emp.setBirthdate(rs.getString(3));
+                Date birthdate = rs.getDate(3);//se toma la fecha
+                //emp.setFecha(dateFormat.format(birthdate));// se convierte la feaha a string
                 emp.setAddress(rs.getString(4));
-                emp.setYear(rs.getInt(5));
-                emp.setEmail(rs.getString(6));
-                emp.setPost(rs.getString(7));
-                emp.setState(rs.getString(8));
-                emp.setArea(rs.getString(9));
+                emp.setPhone(rs.getInt(5));
+                emp.setYear(rs.getInt(6));                
+                emp.setEmail(rs.getString(7));
+                emp.setPost(rs.getString(8));
+                emp.setState(rs.getString(9));
+                emp.setArea(rs.getString(10));
+                System.out.println("la consulta es "+sql);
             }
                
         }catch(SQLException e){

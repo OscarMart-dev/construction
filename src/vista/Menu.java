@@ -14,6 +14,7 @@ import Modelo.post;
 import Dao.DaoUsers;
 import Modelo.users;
 import java.sql.SQLException;
+import java.text.ParseException;
 //import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -595,9 +596,7 @@ public class Menu extends javax.swing.JFrame {
     
        
     private void tableEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableEmployeeMouseClicked
-          
-        
-        //obtener la fila
+  //obtener la fila
         int row = tableEmployee.getSelectedRow();
         //obtener la columna
         int column = tableEmployee.getSelectedColumn();
@@ -606,11 +605,18 @@ public class Menu extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) tableEmployee.getModel();
             Object value = model.getValueAt(row, column);
             String nro_registro = (value != null) ? value.toString() : null; //se convierte el valor a string
-            //JOptionPane.showMessageDialog(null, nro_registro);
+            System.out.println("El registro es :"+nro_registro);
             if (nro_registro != null && !nro_registro.isEmpty()) {
                 // Crear y mostrar la ventana emergente con la información del empleado
-                infoEmployee infoEmployee = new infoEmployee(nro_registro);
-                infoEmployee.setVisible(true);
+                infoEmployeeUpdate infoEmployeeupdate = null;
+                try {
+                    infoEmployeeupdate = new infoEmployeeUpdate(this,nro_registro);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                infoEmployeeupdate.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "No hay información disponible para este registro.");
             }

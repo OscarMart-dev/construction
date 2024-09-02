@@ -1,12 +1,12 @@
 
 package Modelo;
 
-import java.time.LocalDate;
+import java.util.Date;
 public class employee {
 
     int id;
     String name;
-    private LocalDate birthdate; // Usando LocalDate para fechas
+    Date birthdate; // Usando LocalDate para fechas
     String address;
     int phone;
     int year;
@@ -14,11 +14,12 @@ public class employee {
     String post;
     String state;
     String area;
+    String fecha;
 
     public employee() {
     }
 
-    public employee(int id, String name, LocalDate birthdate, String address, int phone, int year, String email, String post, String state, String area) {
+    public employee(int id, String name, Date birthdate, String address, int phone, int year, String email, String post, String state, String area,String fecha) {
         this.id = id;
         this.name = name;
         this.birthdate = birthdate;
@@ -29,10 +30,19 @@ public class employee {
         this.post = post;
         this.state = state;
         this.area= area;
+        this.fecha=fecha;
     }
 
     public String getArea() {
         return area;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public void setArea(String area) {
@@ -55,11 +65,11 @@ public class employee {
         this.name = name;
     }
 
-    public LocalDate getBirthdate() {
+    public Date getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(LocalDate birthdate) {
+    public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
     }
 
