@@ -6,6 +6,9 @@ package vista;
 
 import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
 import Dao.DaoArea;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -115,14 +118,23 @@ public class areaVista extends javax.swing.JFrame {
         String inputArea= txtarea.getText();
         char state;
             if (inputArea != null && !inputArea.trim().isEmpty()) {
-                if (cmbState.getSelectedItem()=="Activo"){
-                        state='A';
-                    }else {
-                        state='I';
-                }
-                    Darea.create(inputArea, state);
-                    this.getMenu().ListarArea();
-                    dispose();
+                boolean existe;
+            try {
+                existe = Darea.nombreExisteCrear(inputArea);
+                if (existe) {
+                                JOptionPane.showMessageDialog(null, "Ya existe un Area con nombre "+inputArea);
+                            } else {
+                                    if (cmbState.getSelectedItem()=="Activo"){
+                                            state='A';
+                                        }else {
+                                            state='I';
+                                    }
+                                        Darea.create(inputArea, state);
+                                        this.getMenu().ListarArea();
+                                        dispose();}
+            } catch (SQLException ex) {
+                Logger.getLogger(areaVista.class.getName()).log(Level.SEVERE, null, ex);
+            }
             }else {
                 JOptionPane.showMessageDialog(null, "Registro Vacio" );
             }

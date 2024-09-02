@@ -156,7 +156,7 @@ public class DaoUsers {
         
         public users consultarUsuario(String nro_registro) throws SQLException {
             users modeloUsers = null;
-            String sql = "select usec_code,usec_name,usec_email,case usec_state when 'A' then 'Activo' else 'Inactivo' end usec_state,usef_entry_date from use_users where usec_code='"+nro_registro+"'";
+            String sql = "select usec_code,usec_name,usec_email, usec_state ,usef_entry_date from use_users where usec_code='"+nro_registro+"'";
              try {
                  con=cn.conectar();
                  ps=con.prepareStatement(sql);

@@ -211,6 +211,138 @@ public class DaoArea {
             }
                 return id ;
             }
+        
+        public boolean nombreExisteCrear(String name) throws SQLException {
+            String sql = "SELECT COUNT(*) FROM are_area  WHERE LOWER(arec_name) = ?"; //se mira si existe un nombre igual en otro registro no se cuenta el que estamos usando
+            boolean existe = false;
+                
+            try {
+                con = cn.conectar();
+                ps = con.prepareStatement(sql);
+                ps.setString(1, name.toLowerCase());
+                //ps.setInt(2, idActual);
+                rs = ps.executeQuery();
+        
+                if (rs.next()) {
+                int conteo = rs.getInt(1);
+                existe = (conteo > 0); // Si el conteo es mayor que 0, el registro existe
+            }
+                } catch (SQLException e) {
+                // Manejo de la excepción
+                e.printStackTrace();
+                 throw e; // Lanzar la excepción para que el llamador pueda manejarla
+                    } finally {
+                        // Cierre de recursos en el bloque finally
+                        try {
+                            if (con != null) con.close();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+            return existe;
+            }
+
+    public boolean nombreExisteUpdate(String name,int id) throws SQLException {
+            String sql = "SELECT COUNT(*) FROM are_area  WHERE LOWER(arec_name) = ? and aren_id != ?"; //se mira si existe un nombre igual en otro registro no se cuenta el que estamos usando
+            boolean existe = false;
+                
+            try {
+                con = cn.conectar();
+                ps = con.prepareStatement(sql);
+                ps.setString(1, name.toLowerCase());
+                ps.setInt(2, id);
+                rs = ps.executeQuery();
+        
+                if (rs.next()) {
+                int conteo = rs.getInt(1);
+                existe = (conteo > 0); // Si el conteo es mayor que 0, el registro existe
+            }
+                } catch (SQLException e) {
+                // Manejo de la excepción
+                e.printStackTrace();
+                 throw e; // Lanzar la excepción para que el llamador pueda manejarla
+                    } finally {
+                        // Cierre de recursos en el bloque finally
+                        try {
+                            if (con != null) con.close();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+            return existe;
+            }
+    
+            public boolean registroVinculadoEmp(int id) throws SQLException {
+            String sql = "select count(*) from emp_employee where  empn_area =?";
+            boolean existe = false;
+
+            try {
+                con = cn.conectar(); // Establece la conexión con la base de datos
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, id); // Establece el parámetro de la consulta
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    int conteo = rs.getInt(1);
+                    existe = (conteo > 0); // Si el conteo es mayor que 0, el registro existe
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e; // Lanzar la excepción para que el llamador pueda manejarla
+            } finally {
+                try {
+                    if (con != null) con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return existe;
+        }
+            
+            public boolean registroVinculadoPost(int id) throws SQLException {
+            String sql = "select COUNT(*) from pos_post where posn_are_id =?";
+            boolean existe = false;
+
+            try {
+                con = cn.conectar(); // Establece la conexión con la base de datos
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, id); // Establece el parámetro de la consulta
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    int conteo = rs.getInt(1);
+                    existe = (conteo > 0); // Si el conteo es mayor que 0, el registro existe
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e; // Lanzar la excepción para que el llamador pueda manejarla
+            } finally {
+                try {
+                    if (con != null) con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return existe;
+        }
+            
+             public area DeleteArea (int id){
+               area modeloPost = null;
+               String sql = "delete from are_area where aren_id="+id;
+               try {
+                 con=cn.conectar();
+                 ps=con.prepareStatement(sql);
+                 ps.executeUpdate();//execute se utiliza para update , insert o delete 
+                 JOptionPane.showMessageDialog(null,"El Area fue Eliminado");
+             }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null,"Error crear cargo"+e);
+                   System.out.println("Error "+e);
+                   System.out.println("el script que se envio fue este"+sql);
+                    }
+                        return modeloPost;
+                    }
  }
 
 

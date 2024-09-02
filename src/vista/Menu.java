@@ -687,6 +687,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+               
                 areaVista ventanaAdicionarArea = new areaVista(this);
                 ventanaAdicionarArea.setVisible(true);
                 //dispose();

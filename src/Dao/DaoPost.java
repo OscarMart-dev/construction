@@ -245,4 +245,48 @@ public class DaoPost {
                 }
                 return list;
             }
+            
+            public boolean registroVinculado(int id) throws SQLException {
+            String sql = "SELECT COUNT(*) FROM emp_employee  WHERE empn_post = ?";
+            boolean existe = false;
+
+            try {
+                con = cn.conectar(); // Establece la conexión con la base de datos
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, id); // Establece el parámetro de la consulta
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    int conteo = rs.getInt(1);
+                    existe = (conteo > 0); // Si el conteo es mayor que 0, el registro existe
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e; // Lanzar la excepción para que el llamador pueda manejarla
+            } finally {
+                try {
+                    if (con != null) con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return existe;
+        }
+               
+               public post DeleteCargo (int id){
+               post modeloPost = null;
+               String sql = "delete from pos_post where posn_id="+id;
+               try {
+                 con=cn.conectar();
+                 ps=con.prepareStatement(sql);
+                 ps.executeUpdate();//execute se utiliza para update , insert o delete 
+                 JOptionPane.showMessageDialog(null,"El Cargo fue Eliminado");
+             }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null,"Error crear cargo"+e);
+                   System.out.println("Error "+e);
+                   System.out.println("el script que se envio fue este"+sql);
+                    }
+                        return modeloPost;
+                    }
 }

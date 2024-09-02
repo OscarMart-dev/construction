@@ -8,6 +8,8 @@ import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
 import Modelo.area;
 import Dao.DaoArea;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -78,6 +80,7 @@ public class infoVista extends javax.swing.JFrame {
         lblArea1 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
         txtId = new javax.swing.JTextField();
+        btnDeleteArea = new javax.swing.JButton();
 
         txtarea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -91,7 +94,7 @@ public class infoVista extends javax.swing.JFrame {
 
         lblArea1.setText("Estado");
 
-        btnAceptar.setText("Aceptar");
+        btnAceptar.setText("Actualizar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarActionPerformed(evt);
@@ -101,6 +104,13 @@ public class infoVista extends javax.swing.JFrame {
         txtId.setEditable(false);
         txtId.setText("jTextField1");
         txtId.setEnabled(false);
+
+        btnDeleteArea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/delete.png"))); // NOI18N
+        btnDeleteArea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteAreaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,7 +130,9 @@ public class infoVista extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAceptar))
                     .addComponent(txtarea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnDeleteArea)
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,13 +142,15 @@ public class infoVista extends javax.swing.JFrame {
                     .addComponent(lblArea)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtarea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtarea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeleteArea))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblArea1)
                     .addComponent(btnAceptar))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
@@ -144,20 +158,28 @@ public class infoVista extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         DaoArea Darea = new DaoArea();
-        
         String idtext=txtId.getText();
-         int id =Integer.parseInt(idtext);
+        int id =Integer.parseInt(idtext);
         String name= txtarea.getText();
         char state;
             if (name != null && !name.trim().isEmpty()) {
-                if (cmbState.getSelectedItem()=="Activo"){
-                        state='A';
-                    }else {
-                        state='I';
-                }
-                    Darea.actualizar(id,name,state);
-                    this.getMenu().ListarArea();
-                    dispose();
+                boolean existe;
+            try {
+                existe = Darea.nombreExisteUpdate(name,id);
+                if (existe) {
+                            JOptionPane.showMessageDialog(null, "Ya existe un Area con nombre "+name);
+                            } else {
+                                    if (cmbState.getSelectedItem()=="Activo"){
+                                            state='A';
+                                        }else {
+                                            state='I';
+                                                }
+                                                Darea.actualizar(id,name,state);
+                                                this.getMenu().ListarArea();
+                                                dispose();}
+            } catch (SQLException ex) {
+                Logger.getLogger(infoVista.class.getName()).log(Level.SEVERE, null, ex);
+            }
             }else {
                 JOptionPane.showMessageDialog(null, "Registro Vacio" );
             }
@@ -172,6 +194,42 @@ public class infoVista extends javax.swing.JFrame {
                 evt.consume(); // Consume el evento si el carácter no es una letra ni un espacio
                 }        // TODO add your handling code here:
     }//GEN-LAST:event_txtareaKeyTyped
+
+    private void btnDeleteAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteAreaActionPerformed
+                String idtext=txtId.getText();
+                int id = Integer.parseInt(idtext);
+                String name=txtarea.getText();
+                DaoArea Darea = new DaoArea();
+                int confirma=JOptionPane.showConfirmDialog(null, 
+                "¿Está seguro de que desea eliminar este registro?", 
+                "Confirmación de Eliminación", 
+                JOptionPane.YES_NO_OPTION);
+                System.out.println("esto salio " +confirma); //si es cero y no es uno
+                if (confirma==0){
+                    boolean vinculadoEmp;
+                    try {
+                        vinculadoEmp = Darea.registroVinculadoEmp(id);
+                        if (vinculadoEmp){
+                            JOptionPane.showMessageDialog(null, "Hay registros de empleados vinculados al Area "+name);
+                        }else {
+                            boolean vinculadoPost;
+                             vinculadoPost = Darea.registroVinculadoPost(id);
+                             if (vinculadoPost){
+                            JOptionPane.showMessageDialog(null, "Hay registros de cargos vinculados al Area "+name);
+                        }else {
+                                Darea.DeleteArea(id);
+                                this.getMenu().ListarArea();// Asumiendo que esto actualiza la lista de áreas
+                                dispose();
+                             }
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(infoVista.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+            }else {
+                System.out.println("no se confirmo");
+            }
+    }//GEN-LAST:event_btnDeleteAreaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -213,6 +271,7 @@ public class infoVista extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnDeleteArea;
     private javax.swing.JComboBox<String> cmbState;
     private javax.swing.JLabel lblArea;
     private javax.swing.JLabel lblArea1;

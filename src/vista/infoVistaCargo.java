@@ -101,6 +101,7 @@ public class infoVistaCargo extends javax.swing.JFrame {
         lblCargoArea = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         cmbAreaCargo = new javax.swing.JComboBox<>();
+        btnDeletePost = new javax.swing.JButton();
 
         txtCargo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -126,6 +127,13 @@ public class infoVistaCargo extends javax.swing.JFrame {
         txtId.setEditable(false);
         txtId.setEnabled(false);
 
+        btnDeletePost.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/delete.png"))); // NOI18N
+        btnDeletePost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletePostActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -148,27 +156,32 @@ public class infoVistaCargo extends javax.swing.JFrame {
                             .addComponent(cmbAreaCargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtCargo)))
                     .addComponent(txtId))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnDeletePost, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addGap(27, 27, 27)
                 .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblCargo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCargoArea)
-                    .addComponent(cmbAreaCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCargo))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCargoArea)
+                            .addComponent(cmbAreaCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnDeletePost))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbStateCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblArea1)
                     .addComponent(btnAceptarCargo))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -234,6 +247,32 @@ public class infoVistaCargo extends javax.swing.JFrame {
                 }        // TODO add your handling code here:
     }//GEN-LAST:event_txtCargoKeyTyped
 
+    private void btnDeletePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletePostActionPerformed
+            String idtext=txtId.getText();
+            String name=txtCargo.getText();
+            DaoPost DCargo = new DaoPost();
+        int id;
+            try {
+                id = Integer.parseInt(idtext);
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "ID no es un número válido.");
+                    return; // Salir del método si el ID no es válido
+                    }
+                    try {
+                        boolean vinculado =DCargo.registroVinculado(id);
+                        if (vinculado){
+                            JOptionPane.showMessageDialog(null, "Hay registro vinculados al cargo "+name);
+                        }else {
+                            DCargo.DeleteCargo(id);
+                            this.getMenu().ListarCargo();// Asumiendo que esto actualiza la lista de áreas
+                            dispose();
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(infoVistaCargo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                
+    }//GEN-LAST:event_btnDeletePostActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -278,6 +317,7 @@ public class infoVistaCargo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptarCargo;
+    private javax.swing.JButton btnDeletePost;
     private javax.swing.JComboBox<String> cmbAreaCargo;
     private javax.swing.JComboBox<String> cmbStateCargo;
     private javax.swing.JLabel lblArea1;
