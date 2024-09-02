@@ -81,6 +81,21 @@ public class Menu extends javax.swing.JFrame {
     }
 
     
+    public Menu(String user) {
+        initComponents();
+        this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
+        
+        //inicializar la lista Area
+        this.setArea(new DaoArea());
+        this.ListarArea();
+        this.setPost(new DaoPost());
+        this.ListarCargo();
+        //inicializar la lista empleado
+        this.ListarEmployee();
+        this.setUsers(new DaoUsers());
+        this.ListarUser();
+        txtUser.setText(user);
+    }
     public Menu() {
         initComponents();
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
@@ -215,6 +230,23 @@ public class Menu extends javax.swing.JFrame {
         tableUsers.setModel(modeloUsers);
     }
     
+    public void ListarEmployeeBuscar(String busqueda){
+
+        List<employee> list =daoE.ListarEmpleadoBuscado(busqueda);
+        modeloEmployee=(DefaultTableModel) tableEmployee.getModel();
+        clearTableEmployee();
+        
+        Object[] ob=new Object[3];
+        
+        for (int i=0;i<list.size();i++){
+            ob[0]=list.get(i).getId();
+            ob[1]=list.get(i).getName();
+            ob[2]=list.get(i).getPost();
+            modeloEmployee.addRow(ob);
+        }
+        tableEmployee.setModel(modeloEmployee);
+
+    }
     
     void clearTableArea(){
         for (int i=0;i<modeloArea.getRowCount();i++){
@@ -278,6 +310,8 @@ public class Menu extends javax.swing.JFrame {
         btnAgregar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         txtBuscarArea = new javax.swing.JTextField();
+        btnCerrarSesion = new javax.swing.JButton();
+        txtUser = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -323,6 +357,11 @@ public class Menu extends javax.swing.JFrame {
         });
 
         btnBuscarEmpleado.setText("Buscar");
+        btnBuscarEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarEmpleadoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pemployeeLayout = new javax.swing.GroupLayout(pemployee);
         pemployee.setLayout(pemployeeLayout);
@@ -572,19 +611,39 @@ public class Menu extends javax.swing.JFrame {
 
         panel.addTab("Area", parea);
 
+        btnCerrarSesion.setText("x");
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+
+        txtUser.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtUser.setBorder(null);
+        txtUser.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCerrarSesion))
+                    .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCerrarSesion)
+                    .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(41, Short.MAX_VALUE))
         );
@@ -661,6 +720,7 @@ public class Menu extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         String busqueda =txtBuscarArea.getText();
         ListarAreaBuscar(busqueda);
+        txtBuscarArea.setText("");
         
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -707,6 +767,7 @@ public class Menu extends javax.swing.JFrame {
     private void btnBuscarCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCargoActionPerformed
             String busqueda =txtBuscarCargo.getText();
             ListarCargoBuscar(busqueda);
+            txtBuscarCargo.setText("");
     }//GEN-LAST:event_btnBuscarCargoActionPerformed
 
     private void btnAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUsuarioActionPerformed
@@ -747,6 +808,7 @@ public class Menu extends javax.swing.JFrame {
     private void btnBuscarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuarioActionPerformed
             String busqueda =txtBuscarUsuario.getText();
             ListarUsuarioBuscar(busqueda);
+            txtBuscarUsuario.setText("");
     }//GEN-LAST:event_btnBuscarUsuarioActionPerformed
 
     private void btnAgregarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEmpleadoActionPerformed
@@ -754,6 +816,19 @@ public class Menu extends javax.swing.JFrame {
                 ventanaAdicionarEmpleado = new infoEmployeeCreate(this);
                 ventanaAdicionarEmpleado.setVisible(true);  
     }//GEN-LAST:event_btnAgregarEmpleadoActionPerformed
+
+    private void btnBuscarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEmpleadoActionPerformed
+                String busqueda =txtBuscarEmpleado.getText();
+                ListarEmployeeBuscar(busqueda);
+                txtBuscarEmpleado.setText("");
+    }//GEN-LAST:event_btnBuscarEmpleadoActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+                    dispose();
+                    Login login = null;
+                    login = new Login();
+                    login.setVisible(true);
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -776,6 +851,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscarCargo;
     private javax.swing.JButton btnBuscarEmpleado;
     private javax.swing.JButton btnBuscarUsuario;
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -793,5 +869,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JTextField txtBuscarCargo;
     private javax.swing.JTextField txtBuscarEmpleado;
     private javax.swing.JTextField txtBuscarUsuario;
+    private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }

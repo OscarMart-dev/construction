@@ -49,15 +49,17 @@ public class DaoEmployee {
         employee emp = null;
          //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String sql="select empn_id, empc_name, empf_birthdate, empc_address, empn_phone, empn_years_experience, empc_email, empn_post, empc_state, empn_area from emp_employee where empn_id ='"+nro_registro+"'";
+        System.out.println("la consulta es "+sql);
         try{
             con=cn.conectar();
             ps=con.prepareStatement(sql);
             rs=ps.executeQuery();
             while (rs.next()){
                 emp=new employee();
-                emp.setName(rs.getString(1));
-                emp.setId(rs.getInt(2));
+                emp.setId(rs.getInt(1));
+                emp.setName(rs.getString(2));
                 Date birthdate = rs.getDate(3);//se toma la fecha
+                emp.setBirthdate(birthdate);
                 //emp.setFecha(dateFormat.format(birthdate));// se convierte la feaha a string
                 emp.setAddress(rs.getString(4));
                 emp.setPhone(rs.getInt(5));
@@ -66,7 +68,7 @@ public class DaoEmployee {
                 emp.setPost(rs.getString(8));
                 emp.setState(rs.getString(9));
                 emp.setArea(rs.getString(10));
-                System.out.println("la consulta es "+sql);
+                System.out.println("se envio los datos "+birthdate);
             }
                
         }catch(SQLException e){
@@ -178,4 +180,58 @@ public class DaoEmployee {
                     }
                         return modeloEmployee;
                 }
+     
+     public employee updateEmp (String name,int id,String date,String address,int phone,int year,String email,int post,String State,int area){
+            employee modeloEmployee = null;
+            String sql ="update emp_employee set empc_name='"+name+"', empf_birthdate='"+date+"', empc_address='"+address+"', empn_phone="+phone+", empn_years_experience="+year+", empc_email='"+email+"', empn_post="+post+", empc_state='"+State+"', empn_area="+area+" where empn_id='"+id+"'";
+            try {
+                 con=cn.conectar();
+                 ps=con.prepareStatement(sql);
+                 ps.executeUpdate();//execute se utiliza para update , insert o delete 
+                 JOptionPane.showMessageDialog(null,"El empleado "+id+"-"+name+" fue Actualizado");
+                }catch(SQLException e)
+                    {
+                            JOptionPane.showMessageDialog(null,"Error crear usuario "+e);
+                                    System.out.println("Error "+e);
+                                        System.out.println("el script que se envio fue este"+sql);
+                    }
+                        return modeloEmployee;
+                }
+     
+     public employee deleteEmployee (String id){
+            employee modeloEmployee = null;
+            String sql = "delete from emp_employee where empn_id='"+id+"'";
+            try {
+                 con=cn.conectar();
+                 ps=con.prepareStatement(sql);
+                 ps.executeUpdate();//execute se utiliza para update , insert o delete 
+                 //JOptionPane.showMessageDialog(null,"El Usuario "+userCod+" fue Eliminado");
+                }catch(SQLException e)
+                    {
+                            JOptionPane.showMessageDialog(null,"Error eliminar empleado "+e);
+                                    System.out.println("Error "+e);
+                                        System.out.println("el script que se envio fue este"+sql);
+                    }
+                        return modeloEmployee;
+                }
+     
+     public List ListarEmpleadoBuscado(String valor){
+           List<employee> list = new ArrayList<>();
+           String sql="select empn_id,empc_name,posc_name from emp_employee join pos_post on (empn_post=posn_id) where empn_id like '%"+valor+"%' or empc_name like '%"+valor+"%' or posc_name like '%"+valor+"%'";
+           try{
+               con=cn.conectar();
+               ps=con.prepareStatement(sql);
+               rs=ps.executeQuery();
+               while (rs.next()){
+                employee e=new employee();
+                e.setId(rs.getInt(1));
+                e.setName(rs.getString(2));
+                e.setPost(rs.getString(3));
+                list.add(e);
+            }
+           }catch(SQLException e){
+               JOptionPane.showMessageDialog(null,e);
+           }
+           return list;
+       }
 }

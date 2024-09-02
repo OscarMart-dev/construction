@@ -54,8 +54,7 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);//esto hace que la ventana se situe en el centro de la pantalla
         //listado de area
         this.menu = menu;
-        DaoEmployee dao=new DaoEmployee(); /*se importa la clase users*/
-        employee empDatos=dao.consultar(nro_registro);
+        employee empDatos=daoE.consultar(nro_registro);
         txtdocumento.setText(String.valueOf(empDatos.getId()));
         txtname.setText(String.valueOf(empDatos.getName()));
         //String fechaString = empDatos.getFecha(); 
@@ -156,8 +155,9 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
         cmbarea = new javax.swing.JComboBox<>();
         cmbpost = new javax.swing.JComboBox<>();
         cmbstate = new javax.swing.JComboBox<>();
-        btnaCrearEmployee = new javax.swing.JButton();
+        btnaActualizarEmployee = new javax.swing.JButton();
         DateFecha = new com.toedter.calendar.JDateChooser();
+        btnDeleteEmployee = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -192,6 +192,7 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
             }
         });
 
+        txtdocumento.setEnabled(false);
         txtdocumento.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtdocumentoKeyTyped(evt);
@@ -219,10 +220,17 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
 
         cmbstate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
 
-        btnaCrearEmployee.setText("Crear");
-        btnaCrearEmployee.addActionListener(new java.awt.event.ActionListener() {
+        btnaActualizarEmployee.setText("Actualizar");
+        btnaActualizarEmployee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnaCrearEmployeeActionPerformed(evt);
+                btnaActualizarEmployeeActionPerformed(evt);
+            }
+        });
+
+        btnDeleteEmployee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/delete.png"))); // NOI18N
+        btnDeleteEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteEmployeeActionPerformed(evt);
             }
         });
 
@@ -232,24 +240,16 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(53, 53, 53)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addGap(43, 43, 43)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtdocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtname, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtaddress, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(DateFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(txtname)
+                            .addComponent(txtdocumento)))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
@@ -257,16 +257,34 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(jLabel10)
                             .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtemail, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                            .addComponent(txtphone, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                            .addComponent(txtyear, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbarea, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbpost, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbstate, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnaCrearEmployee, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(48, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(txtphone))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbpost, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbarea, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtemail, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtyear, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cmbstate, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                                        .addComponent(btnaActualizarEmployee))))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtaddress)
+                            .addComponent(DateFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(18, 18, 18)
+                .addComponent(btnDeleteEmployee)
+                .addGap(16, 16, 16))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,6 +293,7 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDeleteEmployee)
                             .addComponent(txtname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -291,16 +310,15 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(txtaddress, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jLabel6))
-                                            .addComponent(txtphone, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(txtaddress, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(18, 18, 18)
-                                        .addComponent(jLabel7))
-                                    .addComponent(txtyear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel6))
+                                    .addComponent(txtphone, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(txtyear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel8))
                             .addComponent(txtemail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -315,16 +333,16 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel11)
-                    .addComponent(cmbstate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnaCrearEmployee)
-                .addGap(22, 22, 22))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbstate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnaActualizarEmployee)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnaCrearEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaCrearEmployeeActionPerformed
+    private void btnaActualizarEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaActualizarEmployeeActionPerformed
         String name=txtname.getText();
         //se toma a fecha//
         //se obtiene el año de nac
@@ -385,7 +403,7 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
                                             if (email != null && !email.trim().isEmpty()){
                                 if (idArea == 1){
                                     if (edad >= 25 && edad <= 60){
-                                        daoE.createEmp(name, id, fechaNac, address, phone, year, email, idCargo, stateUsu, idArea);
+                                        daoE.updateEmp(name, id, fechaNac, address, phone, year, email, idCargo, stateUsu, idArea);
                                         this.getMenu().ListarEmployee();// Asumiendo que esto actualiza la lista de áreas
                                         dispose();
                                     }else{
@@ -394,14 +412,14 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
                             }else { 
                                     if (idArea == 2){
                                         if (edad >= 20 && edad <= 70){
-                                                daoE.createEmp(name, id, fechaNac, address, phone, year, email, idCargo, stateUsu, idArea);
+                                                daoE.updateEmp(name, id, fechaNac, address, phone, year, email, idCargo, stateUsu, idArea);
                                                 this.getMenu().ListarEmployee();// Asumiendo que esto actualiza la lista de áreas
                                                 dispose();
                                             }else{
                                                 JOptionPane.showMessageDialog(null,"La edad para aplicar al area de "+areaName+" debe ser entre 20 y 70 años");    
                                             }
                                     }else {
-                                    daoE.createEmp(name, id, fechaNac, address, phone, year, email, idCargo, stateUsu, idArea);
+                                    daoE.updateEmp(name, id, fechaNac, address, phone, year, email, idCargo, stateUsu, idArea);
                                     this.getMenu().ListarEmployee();// Asumiendo que esto actualiza la lista de áreas
                                     dispose();
                                     }
@@ -424,7 +442,7 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
         }else{
                 JOptionPane.showMessageDialog(null,"El campo Nombre debe estar lleno");
         }
-    }//GEN-LAST:event_btnaCrearEmployeeActionPerformed
+    }//GEN-LAST:event_btnaActualizarEmployeeActionPerformed
 
     private void cmbareaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cmbareaPropertyChange
             cmbpost.removeAllItems();
@@ -451,6 +469,25 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
         char c=evt.getKeyChar();
         if(c<'0'||c>'9') evt.consume();
     }//GEN-LAST:event_txtyearKeyTyped
+
+    private void btnDeleteEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteEmployeeActionPerformed
+        String id=txtdocumento.getText();
+        String name=txtname.getText();
+            int confirma=JOptionPane.showConfirmDialog(null, 
+            "¿Está seguro de que desea eliminar este registro?", 
+            "Confirmación de Eliminación", 
+            JOptionPane.YES_NO_OPTION);
+            System.out.println("esto salio " +confirma); //si es cero y no es uno
+            
+            if (confirma==0){
+                    daoE.deleteEmployee(id);
+                    JOptionPane.showMessageDialog(null, "El Empleado "+id+"-"+name+" fue eliminado");
+                    this.getMenu().ListarEmployee();// Actualiza el listado de empleados
+                    dispose();
+            }else {
+                System.out.println("no se confirmo");
+            }
+    }//GEN-LAST:event_btnDeleteEmployeeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -492,7 +529,8 @@ public class infoEmployeeUpdate extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser DateFecha;
-    private javax.swing.JButton btnaCrearEmployee;
+    private javax.swing.JButton btnDeleteEmployee;
+    private javax.swing.JButton btnaActualizarEmployee;
     private javax.swing.JComboBox<String> cmbarea;
     private javax.swing.JComboBox<String> cmbpost;
     private javax.swing.JComboBox<String> cmbstate;

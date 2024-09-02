@@ -159,7 +159,7 @@ users usu=new users();
                         registro = dao.registro(name);
                         if (registro) {
                             //System.out.println("El Usuario con pass "+name+" ha inciado sesion");
-                            Menu m=new Menu();
+                            Menu m=new Menu(name);
                             dao.asignaFecha(name);
                             m.setVisible(true);
                             dispose();
