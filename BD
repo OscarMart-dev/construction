@@ -1,0 +1,91 @@
+CREATE DATABASE `construction`;
+
+-- construction.are_area definition
+
+CREATE TABLE `are_area` (
+  `aren_id` int NOT NULL AUTO_INCREMENT,
+  `arec_name` varchar(50) NOT NULL,
+  `arec_estado` char(1) NOT NULL,
+  PRIMARY KEY (`aren_id`)
+);
+
+-- construction.pos_post definition
+CREATE TABLE `pos_post` (
+  `posn_id` int NOT NULL AUTO_INCREMENT,
+  `posc_name` varchar(50) NOT NULL,
+  `posn_are_id` int NOT NULL,
+  `posc_estado` char(1) NOT NULL,
+  PRIMARY KEY (`posn_id`),
+  KEY `posn_are_id` (`posn_are_id`),
+  CONSTRAINT `pos_post_ibfk_1` FOREIGN KEY (`posn_are_id`) REFERENCES `are_area` (`aren_id`)
+) ;
+
+
+-- construction.emp_employee definition
+
+CREATE TABLE `emp_employee` (
+  `empn_id` int NOT NULL,
+  `empc_name` varchar(50) NOT NULL,
+  `empf_birthdate` date NOT NULL,
+  `empc_address` varchar(50) NOT NULL,
+  `empn_phone` int DEFAULT NULL,
+  `empn_years_experience` int NOT NULL,
+  `empc_email` varchar(50) NOT NULL,
+  `empn_post` int NOT NULL,
+  `empc_state` varchar(1) NOT NULL,
+  `empn_area` int NOT NULL,
+  PRIMARY KEY (`empn_id`),
+  KEY `empn_post` (`empn_post`),
+  CONSTRAINT `emp_employee_ibfk_1` FOREIGN KEY (`empn_post`) REFERENCES `pos_post` (`posn_id`)
+) ;
+
+
+-- construction.use_users definition
+
+CREATE TABLE `use_users` (
+  `usec_code` varchar(20) NOT NULL,
+  `usec_name` varchar(50) NOT NULL,
+  `usec_password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `usec_email` varchar(50) NOT NULL,
+  `usec_state` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `usef_entry_date` date DEFAULT NULL,
+  PRIMARY KEY (`usec_code`)
+) ;
+
+----cargue 
+
+---cargue area----
+INSERT INTO construction.are_area
+(aren_id, arec_name, arec_estado)
+VALUES(1, 'Diseño', 'A');
+
+INSERT INTO construction.are_area
+(aren_id, arec_name, arec_estado)
+VALUES(2, 'Construcción', 'A');
+
+----cargue cargo----
+
+INSERT INTO construction.pos_post
+(posn_id, posc_name, posn_are_id, posc_estado)
+VALUES(1, 'Arquitectos', 1, 'A');
+INSERT INTO construction.pos_post
+(posn_id, posc_name, posn_are_id, posc_estado)
+VALUES(2, 'Ingenieros Civiles', 1, 'A');
+INSERT INTO construction.pos_post
+(posn_id, posc_name, posn_are_id, posc_estado)
+VALUES(3, 'Maestros de obra certificados', 2, 'A');
+INSERT INTO construction.pos_post
+(posn_id, posc_name, posn_are_id, posc_estado)
+VALUES(4, 'Bodoqueros', 2, 'A');
+INSERT INTO construction.pos_post
+(posn_id, posc_name, posn_are_id, posc_estado)
+VALUES(5, 'Operarios de maquinaria pesada', 2, 'A');
+INSERT INTO construction.pos_post
+(posn_id, posc_name, posn_are_id, posc_estado)
+VALUES(6, 'Choferes', 2, 'A');
+
+------cargue usuario admin---
+
+INSERT INTO construction.use_users
+(usec_code, usec_name, usec_password, usec_email, usec_state, usef_entry_date)
+VALUES('Admin', 'oscar Martinez', 'c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f', 'oimartinez@unad.com.co', 'A', '2024-09-02');
